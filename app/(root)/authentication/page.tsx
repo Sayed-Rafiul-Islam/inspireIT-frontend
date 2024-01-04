@@ -17,27 +17,22 @@ export default function Authentication() {
     const {logout} = useUserAuth()
 
   return (
-    <div className='flex items-center justify-center h-full'>
-
-
+    <div className='flex justify-center'>
         {
             account ? 
-              <div>
+              <div className="mt-48">
                 <h1 className="text-4xl font-bold text-indigo-400 text-center">Log In</h1>
                 <LogInForm />
                 <p>Don't have an account? Go to <button onClick={()=>setAccount(false)} className="text-blue-500">Sign Up</button></p>
               </div>
             :
-              <div>
+              <div className="mt-48">
                 <h1 className="text-4xl font-bold text-indigo-400 text-center">Sign Up</h1>
                 <SignUpForm />
                 <p>Already have an account? Go to <button onClick={()=>setAccount(true)} className="text-blue-500">Log In</button></p>
               </div>
            
-        }
-    {/* <h1 className='text-3xl'>SignUp</h1> */}
-    
-    
+        }  
   </div>
   )
 }

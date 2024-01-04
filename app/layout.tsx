@@ -1,9 +1,15 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+
 import './globals.css'
 
 import { AuthContextProvider } from './(root)/context/AuthContext'
+import { ThemeProvider } from '@/providers/theme-provider'
+import { ModeToggle } from '@/components/Toogle-theme'
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+import Navbar from '@/components/Navbar'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,11 +26,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthContextProvider>
-        <body className={inter.className}>
-          {children}
-        </body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>          
+            <body className={inter.className}>
+              <Navbar />
+              {/* <ModeToggle /> */}
+              {children}
+            </body>
+        </ThemeProvider>
       </AuthContextProvider>
-      
     </html>
   )
 }

@@ -23,10 +23,10 @@ export default function LogInForm() {
             const status = await login(email,password)
             if (status === 403) {
                 setLoading(false)
-                setMessage("Wrong Password")
+                setMessage("No account with this Email")
             } else if (status === 401) {
                 setLoading(false) 
-                setMessage("No account with this Email")
+                setMessage("Wrong Password")
             } else if (status === 200) {
                 setLoading(true)
                 setMessage("Login Successful")
@@ -36,7 +36,7 @@ export default function LogInForm() {
     }
   return (
     <div className="flex flex-col rounded-lg gap-4 p-4">
-        <div className="bg-indigo-300 flex flex-col w- full rounded-lg gap-4 p-4">
+        <div className="bg-indigo-300 flex flex-col w-full rounded-lg gap-4 p-4">
             <label htmlFor="">Email : </label>
             <input className="text-black" type="email" value={email} onChange={(e)=> setEmail(e.target.value)} />
             <label htmlFor="">Password : </label>
@@ -44,6 +44,7 @@ export default function LogInForm() {
             <button onClick={handleSubmit}>
                 Log In
             </button>
+            
         </div>
 
         <p className={loading 
