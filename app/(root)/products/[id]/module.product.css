@@ -1,0 +1,6 @@
+.table-height {
+    height: 290px;
+    background: #751c1c;
+    overflow: hidden;
+    flex-wrap: wrap;
+}

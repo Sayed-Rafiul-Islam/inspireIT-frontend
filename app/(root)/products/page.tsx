@@ -1,8 +1,10 @@
 "use client"
 
+import Link from "next/link";
 import { useEffect, useState } from "react"
 
 interface Product {
+  id : number,
   product_name : string,
   configuration : string,
   source_name : string,
@@ -21,8 +23,8 @@ export default function Products() {
       //  page count
       useEffect(()=>{
         const getPageCount = async () => {
-            const response = await fetch(`http://localhost:5000/pageCount`)
-            const pageCount = await response.json()
+            const res = await fetch(`http://localhost:5000/inventoryPageCount`)
+            const pageCount = await res.json()
             setPageCount(Math.ceil(pageCount))
         }
         getPageCount()
@@ -31,9 +33,11 @@ export default function Products() {
     // Products
     useEffect(()=> {
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/products?page=${page}`)
-          const products = await res.json()
-          setProducts(products)
+          const res = await fetch(`http://localhost:5000/inventory?page=${page}`)
+          const data = await res.json()
+
+
+          setProducts(data)
       }
       getProducts();
   },[page])
@@ -57,20 +61,19 @@ export default function Products() {
                 <tbody className="text-center">
                 {   
               products.length !== 0 &&
-                  products.map(({product_name,configuration,source_name,unit_price,quantity} : Product,index) => 
+                  products.map(({id,product_name,configuration,source_name,unit_price,quantity} : Product,index) => 
                           <tr key={index}>
                             <td>{page*10 + index + 1}</td>
-                            <td>{product_name}</td>
+                            <td><Link href={`/products/${id}`}>{product_name}</Link></td>
                             <td>{configuration}</td>
                             <td>{source_name}</td>
                             <td>{unit_price} BDT</td>
-                            <td>{quantity}</td>
+                            <td>{quantity > 0 ? quantity : "Sold Out"}</td>
                           </tr> 
                           )  
-                        }
-                        
-                        </tbody>
-              </table>
+                        }   
+                </tbody>
+            </table>
         </div>
         <div className='flex justify-center pb-10'>
             {
