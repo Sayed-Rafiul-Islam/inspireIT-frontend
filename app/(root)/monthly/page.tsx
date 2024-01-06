@@ -25,7 +25,7 @@ export default function MonthlyRevenue() {
       const varify = async () => {
           const access = localStorage.getItem("accessToken")
           setAccessToken(access)
-          const res = await fetch(`http://localhost:5000/varify?accessToken=${accessToken}`,{cache : "no-store"})
+          const res = await fetch(`http://localhost:5000/varify?accessToken=${access}`,{cache : "no-store"})
           const status = res.status
           if (status === 401 || status === 403) {
             logout()

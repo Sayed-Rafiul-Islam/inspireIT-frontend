@@ -34,6 +34,7 @@ export default function AddMonthlyRecord() {
   const [calculation,setCalculation] = useState<null | number>(null)
   const [update,setUpdate] = useState(false)
   const [updatePageCount,setUpdatePageCount] = useState(false)
+  const [show,setShow] = useState(false)
   const pages = Array.from(Array(pageCount).keys())
 
 
@@ -41,23 +42,6 @@ export default function AddMonthlyRecord() {
     const access = localStorage.getItem("accessToken")
     setAccessToken(access)
   },[])
-    useEffect(()=>{
-        if (products.length) {
-            products.map(({
-                buying_price,
-                selling_price,
-                due} : SellRecords,index)=>{
-                    buyingPrice = buyingPrice + buying_price
-                    sellingPrice = sellingPrice + selling_price
-                    totalDue= totalDue + due
-                        
-            })
-          }
-          setBuyingPrice(buyingPrice )
-                        
-          setSellingPrice(sellingPrice )
-          setTotalDue(totalDue )
-    },[update,products.length])
 
     //  page count
     useEffect(()=>{
@@ -92,7 +76,22 @@ export default function AddMonthlyRecord() {
           } else {
             const products = await res.json()
             setProducts(products)
-          }  
+            if (products.length) {
+              products.map(({
+                  buying_price,
+                  selling_price,
+                  due} : SellRecords)=>{
+                      buyingPrice = buyingPrice + buying_price
+                      sellingPrice = sellingPrice + selling_price
+                      totalDue= totalDue + due
+                      
+              })
+            }
+            setBuyingPrice(buyingPrice)
+            setSellingPrice(sellingPrice)
+            setTotalDue(totalDue)
+
+          }
       }
 
         getProducts();
@@ -135,17 +134,18 @@ export default function AddMonthlyRecord() {
     setUpdatePageCount(updatePageCount)
     setProducts([])
     setCalculation(null)
+    setShow(false)
 }
-  const dateSubmit = async () => {
-    
+  const dateSubmit = () => {
     if (startDate === '' || endDate === '') {
         alert("Enter Date")
     } else {
+        setUpdatePageCount(!updatePageCount)
         setBuyingPrice(0)
         setSellingPrice(0)
         setTotalDue(0)
-        setUpdatePageCount(!updatePageCount)
-
+        setShow(true)
+        
     }
 }
 
@@ -222,7 +222,7 @@ export default function AddMonthlyRecord() {
             <button onClick={dateSubmit}>Submit</button>
         </div>
         {
-            products.length > 0 &&
+            show &&
         <div>
             <h2>Total Sold : {sellingPrice}</h2>
             <h2>Total Bought : {buyingPrice}</h2>
