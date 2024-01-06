@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { signUp } from "../actions/signUp";
 
 interface AuthContextProps {
-  user: object;
-  setUser : React.Dispatch<React.SetStateAction<object>>;
+  user: boolean;
+  setUser : React.Dispatch<React.SetStateAction<boolean>>;
   login: (email: string, password: string) => Promise<number>;
   logout: () => void;
   signup: (email: string, password: string, userName: string) => Promise<number>;
@@ -24,7 +24,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }: AuthContextProviderProps) => {
   const router = useRouter();
-  const [user, setUser] = useState<object>({});
+  const [user, setUser] = useState<boolean>(false);
   const [cartItemNumber, setCartItemNumber] = useState(0);
 
   // sign up
@@ -32,13 +32,12 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     const {result,status} = await signUp(email, password, userName);
     if (status === 200) {
       localStorage.setItem("accessToken", result.accessToken);
-      localStorage.setItem("currentUser", JSON.stringify(result))
-      setUser(result);
+      setUser(true);
       router.push("/");
       return status;
     }
     else {
-      setUser({})
+      setUser(false)
       return status
     }
   };
@@ -48,36 +47,26 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     const { result,status } = await logIn(email, password);
     if (status === 200) {
       localStorage.setItem("accessToken", result.accessToken);
-      localStorage.setItem("currentUser", JSON.stringify(result))
-      setUser(result);
+      setUser(true);
       router.push("/");
       return status
     } else {
-      setUser({})
+      setUser(false)
       return status;
     }
   };
 
   const logout = (): void => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("currentUser");
-    setUser({});
+    setUser(false);
+    router.push('/authentication')
   };
 
   useEffect(() => {
-    const isUser = localStorage.getItem("currentUser");
+    const isUser = localStorage.getItem("accessToken");
     if(!isUser) {
       router.push("/authentication")
-    } else {
-      const currentUser : any  = localStorage.getItem("currentUser")
-      setUser(JSON.parse(currentUser))
     }
-    // const isCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    // const len = isCart.length;
-    // isUser && setUser(true);
-    // if (isCart) {
-    //   setCartItemNumber(len);
-    // }
   }, []);
 
   const contextValue: AuthContextProps = {

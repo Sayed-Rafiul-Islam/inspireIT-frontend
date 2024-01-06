@@ -5,9 +5,10 @@ export const addProduct = async (
     product_name: string, 
     configuration: string,
     source_name : string, 
-    unit_price : number
+    unit_price : number,
+    accessToken : string | null
     ) => {
-    const res = await fetch(`http://localhost:5000/addProduct`, {
+    const res = await fetch(`http://localhost:5000/addProduct?accessToken=${accessToken}`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

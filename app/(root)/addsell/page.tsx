@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { findProductById } from "../actions/findProductById"
 import { addSell } from "../actions/addSell"
+import { useUserAuth } from "../context/AuthContext"
 
 interface Product {
   product_id : string,
@@ -14,28 +15,35 @@ interface Product {
 
 export default function AddSell() {
   
+  const [accessToken,setAccessToken] = useState<string | null>(null)
+  const {logout} = useUserAuth()
   const [productId,setProductId] = useState('')
   const [product,setProduct] = useState<Product | null>(null)
   const [customerName,setCustomerName] = useState('')
-  const [contactNo,setContactNo] = useState<number>(0)
+  const [contactNo,setContactNo] = useState<string>('')
   const [address,setAddres] = useState('')
   const [price,setPrice] = useState<number>(0)
   const [due,setDue] = useState<number>(0)
   const [message,setMessage] = useState('')
   const [sellMessage,setSellMessage] = useState('')
 
-  const handleSubmit = async () => {
-    
+  useEffect(()=>{
+    const access = localStorage.getItem("accessToken")
+    setAccessToken(access)
+  },[])
 
+  const handleSubmit = async () => {
     setMessage("Searching...")
     if (productId === '') {
       alert("Enter Product ID")
       setMessage('')
     } else {
-      const {status,product} = await findProductById(productId)
+      const {status,product} = await findProductById(productId,accessToken)
       if(status === 200) {
         setProduct(product)
         setMessage('')
+      } else if (status === 401 || status === 403) {
+        logout()
       } else {
         setProduct(null)
         setMessage("No product by that ID in the inventory")
@@ -47,41 +55,43 @@ export default function AddSell() {
     const handleSell = async () => {
 
       setSellMessage("Processing...")
-      if (customerName === '' || !contactNo  || !price) {
+      if (customerName === '' || !contactNo  || !price || productId === '') {
         alert("Fill in the informations")
-        setMessage('')
+        setSellMessage('')
       } else if (product) {
-         await addSell(productId,product.product_name,product.configuration,product.unit_price,customerName,address,contactNo,due,price)
+        const data = {
+          product_id : productId,
+          product_name : product.product_name,
+          configuration : product.configuration,
+          unit_price : product.unit_price,
+          customer_name : customerName,
+          contact_no : contactNo,
+          address : address,
+          selling_price : price,
+          due:due,
+          source_name : product.source_name,
+          accessToken
+        }
+        const status =  await addSell(data)
+        if (status === 200) {
+          alert("Sell added to the sell records")
+          setProductId('')
+          setProduct(null)
+          setSellMessage('')
+        } else if (status === 401 || status === 403) {
+          logout()
+        } else if (status === 500) {
+          alert("Product ID already in use")
+          setProductId('')
+          setProduct(null)
+          setSellMessage('')
+        } else {
+          alert("Something went wrong")
+          setProductId('')
+          setProduct(null)
+          setSellMessage('')
+        }
       }
-
-    //   if (status === 200) {
-    //       setMessage("Product added to the inventory and product's list")
-    //       setProductId('')
-    //       setProductName('')
-    //       setConfiguration('')
-    //       setSourceName('')
-    //       setUnitPrice(0)
-          
-    //   } else if (status === 201) {
-    //     setMessage("Product added to the product's list and inventory updated")
-    //     setProductId('')
-    //     setProductName('')
-    //     setConfiguration('')
-    //     setSourceName('')
-    //     setUnitPrice(0)
-    //   } else if (status === 400) {
-    //     setMessage("Product ID already in use")
-    //     setProductId('')
-    //   } else {
-    //     setMessage("Something went wrong")
-    //     setMessage("Product added to the product's list and inventory updated")
-    //     setProductId('')
-    //     setProductName('')
-    //     setConfiguration('')
-    //     setSourceName('')
-    //     setUnitPrice(0)
-    //   }
-    // }
     }
 
 
@@ -97,7 +107,7 @@ export default function AddSell() {
             </div>
 
             {
-              product && 
+              productId !== '' && product &&
               <div>
                 <div className="ml-64">
                     <h1 className="text-2xl">Product Name : {product.product_name}</h1>
@@ -107,14 +117,14 @@ export default function AddSell() {
                   <label htmlFor="">Customer Name : </label>
                   <input className="text-black w-1/4" type="text" value={customerName} onChange={(e)=> setCustomerName(e.target.value)} />
                   <label htmlFor="">Contact NO : </label>
-                  <input className="text-black w-3/4" type="text" value={contactNo} onChange={(e)=> setContactNo(parseInt(e.target.value))} />
+                  <input className="text-black w-3/4" type="text" value={contactNo} onChange={(e)=> setContactNo(e.target.value)} />
                   <label htmlFor="">Address : </label>
                   <input className="text-black w-1/6" type="text" value={address} onChange={(e)=> setAddres(e.target.value)} />
                   <label htmlFor="">Price : </label>
-                  <input className="text-black w-1/6" type="text" value={price} onChange={(e)=> setPrice(parseInt(e.target.value))} />
+                  <input className="text-black w-1/6" type="number" value={price} onChange={(e)=> setPrice(parseInt(e.target.value))} />
                   <label htmlFor="">Due : </label>
                   <input placeholder='BDT' className="text-black w-1/6" type="number" value={due} onChange={(e)=> setDue(parseInt(e.target.value))} />
-                  {message}
+                  {sellMessage}
                   <button className="bg-indigo-500 rounded-lg p-3 w-1/4 ml-64 hover:text-white transition-all" onClick={handleSell}>
                       Sell Product
                   </button>

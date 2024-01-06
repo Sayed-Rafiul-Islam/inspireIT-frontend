@@ -1,25 +1,32 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addProduct } from '../actions/addProduct'
+import { useUserAuth } from '../context/AuthContext'
 
 export default function AddProduct() {
 
+  const [accessToken,setAccessToken] = useState<string | null>(null)
+  const {logout} = useUserAuth()
   const [productId,setProductId] = useState('')
   const [productName,setProductName] = useState('')
   const [configuration,setConfiguration] = useState('')
   const [sourceName,setSourceName] = useState('')
   const [unitPrice,setUnitPrice] = useState<number>(0)
   const [message,setMessage] = useState('')
+
+  useEffect(()=>{
+    const access = localStorage.getItem("accessToken")
+    setAccessToken(access)
+  },[])
   
   const handleSubmit = async () => {
     
-
       setMessage("Adding product to the inventory...")
       if (productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice) {
         alert("Invalid input")
         setMessage('')
       } else {
-        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice)
+        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice,accessToken)
         if (status === 200) {
             setMessage("Product added to the inventory and product's list")
             setProductId('')
@@ -38,6 +45,8 @@ export default function AddProduct() {
         } else if (status === 400) {
           setMessage("Product ID already in use")
           setProductId('')
+        } else if (status === 401 || status === 403) {
+            logout();
         } else {
           setMessage("Something went wrong")
           setMessage("Product added to the product's list and inventory updated")
