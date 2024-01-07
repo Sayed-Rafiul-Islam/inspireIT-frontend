@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { addProduct } from '../actions/addProduct'
 import { useUserAuth } from '../context/AuthContext'
+import { usePathname } from 'next/navigation'
 
 export default function AddProduct() {
 
   const [accessToken,setAccessToken] = useState<string | null>(null)
-  const {logout} = useUserAuth()
+  const {logout,setActive} = useUserAuth()
+  const path = usePathname()
+  setActive(path)
   const [productId,setProductId] = useState('')
   const [productName,setProductName] = useState('')
   const [configuration,setConfiguration] = useState('')

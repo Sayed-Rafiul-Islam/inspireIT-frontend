@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useUserAuth } from "../context/AuthContext"
+import { usePathname } from "next/navigation"
 
 interface Records {
     monthly_record_id : number,
@@ -16,7 +17,9 @@ interface Records {
 
 export default function MonthlyRevenue() {
     const [accessToken,setAccessToken] = useState<string | null>(null)
-    const {logout} = useUserAuth()
+    const {logout,setActive} = useUserAuth()
+    const path = usePathname()
+    setActive(path)
     const [month,setMonth] = useState('01')
     const [year,setYear] = useState('')
     const [records,setRecords] = useState([])

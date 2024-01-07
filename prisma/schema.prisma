@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admins {
+  adminId    Int    @id @default(autoincrement())
+  admin_name String @db.VarChar(45)
+  email      String @db.VarChar(45)
+  pass_word  String @db.VarChar(100)
+}
+
+model inventory {
+  id            Int    @id @default(autoincrement())
+  product_name  String @db.VarChar(45)
+  configuration String @db.VarChar(45)
+  source_name   String @db.VarChar(45)
+  unit_price    Int
+  quantity      Int
+}
+
+model monthly_records {
+  monthly_record_id Int    @id @default(autoincrement())
+  bought            Int
+  sold              Int
+  employee          Int
+  additionals       Int
+  due               Int
+  profit            Int
+  record_date       String @db.VarChar(45)
+}
+
+model products {
+  product_id    String @id @unique(map: "product_id_UNIQUE") @db.VarChar(45)
+  product_name  String @db.VarChar(100)
+  configuration String @db.VarChar(45)
+  source_name   String @db.VarChar(45)
+  unit_price    String @db.VarChar(45)
+}
+
+model sell_records {
+  selling_id    Int      @id @unique(map: "_UNIQUE") @default(autoincrement())
+  customer_name String   @db.VarChar(45)
+  contact_no    String   @db.VarChar(45)
+  address       String?  @db.VarChar(100)
+  product_id    String   @unique(map: "product_id_UNIQUE") @db.VarChar(45)
+  product_name  String   @db.VarChar(100)
+  configuration String?  @db.VarChar(45)
+  buying_price  Int
+  selling_price Int
+  due           Int?
+  selling_date  DateTime @db.Date
+}

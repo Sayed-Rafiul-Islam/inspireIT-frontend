@@ -13,7 +13,7 @@ export const addProduct = async (
         headers : {
             "Content-type" : "application/json"
         },
-        body : JSON.stringify({product_id,product_name,configuration,unit_price}),
+        body : JSON.stringify({product_id,product_name,source_name,configuration,unit_price}),
         cache : "no-store"
     }) 
     const status = res.status

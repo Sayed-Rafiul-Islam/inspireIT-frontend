@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react"
 import { useUserAuth } from "../context/AuthContext";
+import { usePathname } from "next/navigation";
 
 interface Product {
   id : number,
@@ -16,7 +17,9 @@ interface Product {
 
 export default function Products() {
 
-  const {logout} = useUserAuth()
+  const {logout,setActive} = useUserAuth()
+  const path = usePathname()
+  setActive(path)
   const [products, setProducts] = useState([])
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);

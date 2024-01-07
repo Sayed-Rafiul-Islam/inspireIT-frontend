@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import SellRecords from "../sellrecords/page";
 import { useUserAuth } from "../context/AuthContext";
+import { usePathname } from "next/navigation";
 
 interface SellRecords {
   product_id : string,
@@ -19,7 +20,9 @@ interface SellRecords {
 
 export default function AddMonthlyRecord() {
 
-  const {logout} = useUserAuth()
+  const {logout,setActive} = useUserAuth()
+  const path = usePathname()
+  setActive(path)
   const [accessToken,setAccessToken] = useState<string | null>(null)
   const [products, setProducts] = useState([])
   const [pageCount, setPageCount] = useState(0);

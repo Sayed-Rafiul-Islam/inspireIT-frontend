@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUserAuth } from "../context/AuthContext";
+import { usePathname } from "next/navigation";
 
 interface SellRecords {
   product_id : string,
@@ -18,13 +19,16 @@ interface SellRecords {
 
 export default function SellRecords() {
 
-  const {logout} = useUserAuth()
+  const {logout,setActive} = useUserAuth()
   const [products, setProducts] = useState([])
   const [update,setUpdate] = useState(false)
   const [search,setSearch] = useState('')
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
+  const [dueOnly, setDueOnly] = useState(false);
   const pages = Array.from(Array(pageCount).keys())
+  const path = usePathname()
+  setActive(path)
 
       //  page count
       useEffect(()=>{
@@ -79,6 +83,12 @@ export default function SellRecords() {
             <button className="ml-2" onClick={handleSearch}>Search</button>
         </div>
         <button onClick={clearSearch}>Clear Search</button>
+        <button
+        onClick={()=>setDueOnly(!dueOnly)}
+        className={dueOnly ? 
+        'text-white bg-blue-500 px-2 rounded-sm transition-all'
+         : 
+         'text-blue-500 border border-blue-500 px-2 rounded-sm transition-all'}>Due Records</button>
         <div className="w-11/12 flex mx-auto">
               <table className="w-full">
                 <thead>
@@ -107,6 +117,35 @@ export default function SellRecords() {
                 
               </tr>
               :
+              <>
+                {
+                  dueOnly ?
+                  products.map(({product_id,customer_name,
+                    contact_no,
+                    address,
+                    product_name,
+                    configuration,
+                    due,
+                    buying_price,
+                    selling_price,
+                    selling_date} : SellRecords,index) => {
+                    if (due > 0) {
+                      return <tr key={index}>
+                      <td>{page*10 + index + 1}</td>
+                      <td>{customer_name}</td> 
+                      <td>{contact_no}</td> 
+                      <td>{address}</td>
+                      <td>{product_id}</td>
+                      <td>{product_name}</td>
+                      <td>{configuration}</td>
+                      <td>{buying_price} BDT</td>
+                      <td>{selling_price} BDT</td>
+                      <td>{due} BDT</td>
+                      <td>{selling_date.split("T")[0]}</td>
+                    </tr> 
+                    } 
+                         } )
+                  :
                   products.map(({product_id,customer_name,
                     contact_no,
                     address,
@@ -129,7 +168,9 @@ export default function SellRecords() {
                             <td>{due} BDT</td>
                             <td>{selling_date.split("T")[0]}</td>
                           </tr> 
-                          )  
+                          )
+                }
+              </>  
                   }
                        
                         </tbody>

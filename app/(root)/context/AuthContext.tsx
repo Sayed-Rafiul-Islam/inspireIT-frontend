@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { signUp } from "../actions/signUp";
 
 interface AuthContextProps {
+  active : string;
+  setActive : React.Dispatch<React.SetStateAction<string>>;
   user: boolean;
-  setUser : React.Dispatch<React.SetStateAction<boolean>>;
+  // setUser : React.Dispatch<React.SetStateAction<boolean>>;
   login: (email: string, password: string) => Promise<number>;
   logout: () => void;
   signup: (email: string, password: string, userName: string) => Promise<number>;
@@ -25,6 +27,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }: AuthContextProviderProps) => {
   const router = useRouter();
   const [user, setUser] = useState<boolean>(false);
+  const [active, setActive] = useState<string>('/');
   const [cartItemNumber, setCartItemNumber] = useState(0);
 
   // sign up
@@ -66,12 +69,15 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     const isUser = localStorage.getItem("accessToken");
     if(!isUser) {
       router.push("/authentication")
+    } else {
+      setUser(true)
     }
   }, []);
 
   const contextValue: AuthContextProps = {
+    active,
+    setActive,
     user,
-    setUser,
     login,
     logout,
     signup,

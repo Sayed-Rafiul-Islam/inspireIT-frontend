@@ -6,8 +6,6 @@ import './globals.css'
 
 import { AuthContextProvider } from './(root)/context/AuthContext'
 import { ThemeProvider } from '@/providers/theme-provider'
-import { ModeToggle } from '@/components/Toogle-theme'
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import Navbar from '@/components/Navbar'
 
 
@@ -30,7 +28,6 @@ export default function RootLayout({
             <body className={inter.className}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               <Navbar />
-              <ModeToggle />
               {children}
               </ThemeProvider>
             </body>

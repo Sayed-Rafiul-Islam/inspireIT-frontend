@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { findProductById } from "../actions/findProductById"
 import { addSell } from "../actions/addSell"
 import { useUserAuth } from "../context/AuthContext"
+import { usePathname } from "next/navigation"
 
 interface Product {
   product_id : string,
@@ -16,7 +17,7 @@ interface Product {
 export default function AddSell() {
   
   const [accessToken,setAccessToken] = useState<string | null>(null)
-  const {logout} = useUserAuth()
+  const {logout,setActive} = useUserAuth()
   const [productId,setProductId] = useState('')
   const [product,setProduct] = useState<Product | null>(null)
   const [customerName,setCustomerName] = useState('')
@@ -26,6 +27,8 @@ export default function AddSell() {
   const [due,setDue] = useState<number>(0)
   const [message,setMessage] = useState('')
   const [sellMessage,setSellMessage] = useState('')
+  const path = usePathname()
+  setActive(path)
 
   useEffect(()=>{
     const access = localStorage.getItem("accessToken")
