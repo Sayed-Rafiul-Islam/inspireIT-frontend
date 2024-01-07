@@ -8,7 +8,7 @@ interface Data {
     customer_name : string,
     contact_no : string,
     address : string,
-    selling_price : number
+    selling_price : number,
     due : number,
     source_name : string,
     accessToken : string | null

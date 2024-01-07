@@ -7,8 +7,8 @@ import { ModeToggle } from '@/components/Toogle-theme'
 
 export default function Navbar() {
   const {user,logout,active} = useUserAuth()
-  const activeClass = 'text-zinc-300 hover:text-zinc-300 transition-all font-bold'
-  const inactiveClass = 'text-zinc-500 hover:text-zinc-300 transition-all'
+  const activeClass = 'text-zinc-800 dark:text-zinc-300 transition-all font-bold'
+  const inactiveClass = 'text-zinc-500 dark:hover:text-zinc-300 hover:text-zinc-800 transition-all'
   return (
         <ul className="flex px-10 justify-between border-b dark:border-zinc-700 border-zinc-200">
             {
@@ -18,7 +18,7 @@ export default function Navbar() {
                   <li className={active === '/' ? activeClass : inactiveClass}><Link prefetch href='/'>Home</Link></li> 
                   <li className={active === '/addsell' ? activeClass : inactiveClass}><Link prefetch href='/addsell'>Add Sell</Link></li> 
                   <li className={active === '/addproduct' ? activeClass : inactiveClass}><Link prefetch href='/addproduct'>Add Product</Link></li>
-                  <li className={active === '/products' ? activeClass : inactiveClass}><Link prefetch href='/products'>Products</Link></li>
+                  <li className={active === '/products' ? activeClass : inactiveClass}><Link prefetch href='/products'>Inventory</Link></li>
                   <li className={active === '/sellrecords' ? activeClass : inactiveClass}><Link prefetch href='/sellrecords'>Sell Records</Link></li>
                   <li className={active === '/addmonthly' ? activeClass : inactiveClass}><Link prefetch href='/addmonthly'>Add Monthly Records</Link></li>
                   <li className={active === '/monthly' ? activeClass : inactiveClass}><Link prefetch href='/monthly'>Monthly Revenue</Link></li>

@@ -5,6 +5,20 @@ import SellRecords from "../sellrecords/page";
 import { useUserAuth } from "../context/AuthContext";
 import { usePathname } from "next/navigation";
 
+import toast, { Toaster } from 'react-hot-toast';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 interface SellRecords {
   product_id : string,
   customer_name: string,
@@ -22,7 +36,6 @@ export default function AddMonthlyRecord() {
 
   const {logout,setActive} = useUserAuth()
   const path = usePathname()
-  setActive(path)
   const [accessToken,setAccessToken] = useState<string | null>(null)
   const [products, setProducts] = useState([])
   const [pageCount, setPageCount] = useState(0);
@@ -32,8 +45,8 @@ export default function AddMonthlyRecord() {
   let [buyingPrice,setBuyingPrice] = useState(0)
   let [sellingPrice,setSellingPrice] = useState(0)
   let [totalDue,setTotalDue] = useState(0)
-  const [employeeBill,setEmploBill] = useState(0)
-  const [additionalCosts,setAdditionalCosts] = useState(0)
+  const [employeeBill,setEmployeeBill] = useState<number>(0)
+  const [additionalCosts,setAdditionalCosts] = useState<number>(0)
   const [calculation,setCalculation] = useState<null | number>(null)
   const [update,setUpdate] = useState(false)
   const [updatePageCount,setUpdatePageCount] = useState(false)
@@ -44,6 +57,7 @@ export default function AddMonthlyRecord() {
   useEffect(()=>{
     const access = localStorage.getItem("accessToken")
     setAccessToken(access)
+    setActive(path)
   },[])
 
     //  page count
@@ -122,7 +136,7 @@ export default function AddMonthlyRecord() {
     }) 
     const status = res.status
     if (status === 200) {
-        alert("Record Added")
+        toast.success("Monthly Record Added")
     } else {
         alert("Something went wrong")
     }
@@ -154,26 +168,41 @@ export default function AddMonthlyRecord() {
 
   return (
     <div>
+      <h1 className="text-center text-4xl font-bold my-6">Add Monthly Records</h1>
+      <div className="w-11/12 mx-auto">
+            <label className="text-green-500 mr-2" htmlFor="">From :</label>
+            <input type="date" value={startDate} onChange={e=>setStartDate(e.target.value)} />
+            <label className="text-red-500 mx-2" htmlFor="">To :</label> 
+            <input type="date" value={endDate} onChange={e=>setEndDate(e.target.value)} />
+            <button className="ml-2" onClick={dateSubmit}>Submit</button>
+        </div>
         <div className="w-11/12 flex mx-auto">
               <table className="w-full">
                 <thead>
                 <tr>
-                  <th>Serial No</th>
-                  <th>Customer Name</th> 
-                  <th>Contact NO</th>
-                  <th>Address</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Configuration</th>
-                  <th>Buying Price</th>
-                  <th>Selling Price</th>
-                  <th>Due</th>
-                  <th>Date</th>
+                  <th className="py-2">Serial No</th>
+                  <th className="py-2">Customer Name</th> 
+                  <th className="py-2">Contact NO</th>
+                  <th className="py-2">Address</th>
+                  <th className="py-2">Product ID</th>
+                  <th className="py-2">Product Name</th>
+                  <th className="py-2">Configuration</th>
+                  <th className="py-2">Buying Price</th>
+                  <th className="py-2">Selling Price</th>
+                  <th className="py-2">Due</th>
+                  <th className="py-2">Date</th>
                 </tr>
                 </thead>
 
                 <tbody className="text-center">
-                {   
+                  {
+                    products.length === 0 ?
+                    <tr className="text-red-400 text-center text-3xl font-bold">
+                      <td className="mt-36" colSpan={8}>
+                      No Records Found
+                      </td> 
+                    </tr>
+                    :
               products.length !== 0 &&
                   products.map(({product_id,customer_name,
                     contact_no,
@@ -184,22 +213,21 @@ export default function AddMonthlyRecord() {
                     buying_price,
                     selling_price,
                     selling_date} : SellRecords,index) => 
-                          <tr key={index}>
-                            <td>{page*10 + index + 1}</td>
-                            <td>{customer_name}</td> 
-                            <td>{contact_no}</td> 
-                            <td>{address}</td>
-                            <td>{product_id}</td>
-                            <td>{product_name}</td>
-                            <td>{configuration}</td>
-                            <td>{buying_price} BDT</td>
-                            <td>{selling_price} BDT</td>
-                            <td>{due} BDT</td>
-                            <td>{selling_date.split("T")[0]}</td>
+                          <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
                           </tr> 
-                          )  
-                        }
-                        
+                          )            
+                  }      
                         </tbody>
               </table>
         </div>
@@ -217,34 +245,77 @@ export default function AddMonthlyRecord() {
                 )
             }
         </div>
-        <div>
-            <label htmlFor="">From :</label> <br />
-            <input type="date" value={startDate} onChange={e=>setStartDate(e.target.value)} /><br />
-            <label htmlFor="">To :</label> 
-            <input type="date" value={endDate} onChange={e=>setEndDate(e.target.value)} />
-            <button onClick={dateSubmit}>Submit</button>
-        </div>
         {
             show &&
-        <div>
-            <h2>Total Sold : {sellingPrice}</h2>
-            <h2>Total Bought : {buyingPrice}</h2>
-            <h2>Total Due : {totalDue}</h2>
-            <label htmlFor="">Total Employee Bill :</label>
-            <input type="number" value={employeeBill} onChange={e=>setEmploBill(parseInt(e.target.value))} /> <br />
-            <input type="number" value={additionalCosts} onChange={e=>setAdditionalCosts(parseInt(e.target.value))} /> <br />
-            <button onClick={()=>setCalculation(sellingPrice - buyingPrice - employeeBill - additionalCosts)}>Calculate</button>
-            <button onClick={handleClearFields}>Clear Fields</button>
-            {
+        <div className="w-1/2 border-r border-b border-zinc-500 mx-auto px-20 py-6 rounded-lg pb-10 mb-10">
+            <div className="flex justify-between">
+              <h2 className="">Total Sold :</h2>
+              <p ><span className="text-green-600">{sellingPrice}</span> BDT</p>
+            </div>
+            <div className="flex justify-between">
+              <h2 className="">Total Bought :</h2>
+              <p className="">{buyingPrice} BDT</p>
+            </div>
+            <div className="flex justify-between">
+              <h2 className="">Total Due : </h2>
+              <p><span className="text-red-600">{totalDue}</span> BDT</p>
+            </div>
+            <div className="flex justify-between">
+              <h2 >Total Employee Bill :</h2>
+              <input className="text-zinc-700 w-1/6 outline-none border-b border-zinc-300
+            dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
+            focus:border-b-2 focus:border-zinc-700 place-content-end" type="number" value={employeeBill} onChange={e=>setEmployeeBill(parseInt((e.target.value)))} />
+            </div>
+            <div className="flex justify-between">
+              <h2 className="">Additional Costs :</h2>
+              <input className="text-zinc-700 w-1/6 outline-none border-b border-zinc-300
+            dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
+            focus:border-b-2 focus:border-zinc-700" type="number" value={additionalCosts} onChange={e=>setAdditionalCosts(parseInt(e.target.value))} />
+            </div>
+            <div className="flex justify-between w-full gap-x-10 mt-6">
+            <button className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 rounded-lg transition-all
+                    hover:shadow-md hover:shadow-zinc-700 " onClick={handleClearFields}>Clear Fields
+            </button>
+            <AlertDialog>
+                    <AlertDialogTrigger 
+                    className="mt-2 px-2 py-1 w-1/2 rounded-lg transition-all
+                    hover:shadow-md hover:shadow-zinc-700 bg-black text-white dark:bg-zinc-300 dark:text-black"
+                    onClick={()=>setCalculation(sellingPrice - buyingPrice - employeeBill - additionalCosts)}
+                    >
+                      Calculate
+                    </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Calculations of the Records</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                <p>Total remaining Due : <span className="text-red-500">{totalDue}</span> BDT</p>
+                                <p>Total Bought : {buyingPrice} BDT</p>
+                                <p>Total Sold : {sellingPrice} BDT</p>
+                                <p>Employee Costs : {employeeBill} BDT</p>
+                                <p>Additional Costs : {additionalCosts} BDT</p>
+                                <p className="text-md">Total remaining Due : <b className="text-green-500">{calculation}</b> BDT</p>
+                            
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={addToMonthly}>Add to Monthly Records</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+            </AlertDialog>
+            
+            </div>
+            {/* {
                 calculation !== null && 
                 <div>
                     <h1>Total Profit : {calculation}</h1>
                     <button onClick={addToMonthly}>Add to Monthly Records</button>
                 </div>
                 
-            }
+            } */}
         </div>
         }
+        <Toaster />
     </div>
   )
 }

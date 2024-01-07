@@ -5,6 +5,20 @@ import { findProductById } from "../actions/findProductById"
 import { addSell } from "../actions/addSell"
 import { useUserAuth } from "../context/AuthContext"
 import { usePathname } from "next/navigation"
+import toast, { Toaster } from 'react-hot-toast';
+import '../../globals.css'
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface Product {
   product_id : string,
@@ -28,23 +42,23 @@ export default function AddSell() {
   const [message,setMessage] = useState('')
   const [sellMessage,setSellMessage] = useState('')
   const path = usePathname()
-  setActive(path)
+
 
   useEffect(()=>{
     const access = localStorage.getItem("accessToken")
     setAccessToken(access)
+    setActive(path)
   },[])
 
   const handleSubmit = async () => {
-    setMessage("Searching...")
     if (productId === '') {
-      alert("Enter Product ID")
-      setMessage('')
+      setMessage('Enter Product ID')
     } else {
       const {status,product} = await findProductById(productId,accessToken)
       if(status === 200) {
         setProduct(product)
         setMessage('')
+        
       } else if (status === 401 || status === 403) {
         logout()
       } else {
@@ -58,9 +72,8 @@ export default function AddSell() {
     const handleSell = async () => {
 
       setSellMessage("Processing...")
-      if (customerName === '' || !contactNo  || !price || productId === '') {
-        alert("Fill in the informations")
-        setSellMessage('')
+      if (customerName === '' || contactNo === ''  || !price || productId === '') {
+        setSellMessage('Invalid Input')
       } else if (product) {
         const data = {
           product_id : productId,
@@ -77,22 +90,32 @@ export default function AddSell() {
         }
         const status =  await addSell(data)
         if (status === 200) {
-          alert("Sell added to the sell records")
+          toast.success('Record Added to the sell Records')
           setProductId('')
           setProduct(null)
           setSellMessage('')
+          setCustomerName('')
+          setContactNo('')
+          setAddres('')
+          setPrice(0)
+          setDue(0)
         } else if (status === 401 || status === 403) {
           logout()
         } else if (status === 500) {
-          alert("Product ID already in use")
           setProductId('')
           setProduct(null)
-          setSellMessage('')
+          setSellMessage('Product ID already in use')
         } else {
           alert("Something went wrong")
           setProductId('')
           setProduct(null)
           setSellMessage('')
+          setSellMessage('')
+          setCustomerName('')
+          setContactNo('')
+          setAddres('')
+          setPrice(0)
+          setDue(0)
         }
       }
     }
@@ -102,38 +125,114 @@ export default function AddSell() {
     <div>
       <h1 className='text-4xl font-bold text-center mt-10'>Sell Product</h1>
             <div className="flex flex-col w-1/3 mx-auto mt-5">
-              <input placeholder='Enter Product ID' className="text-black w-5/6 mx-auto border-b border-black" type="text" value={productId} onChange={(e)=> setProductId(e.target.value)} />
-              <p className="ml-8 mt-4">{message}</p>
-              <button className="mt-4 hover:bg-black p-3 hover:text-white w-1/2 mx-auto rounded-lg transition-all" onClick={handleSubmit}>
-                  Submit
-              </button>
+                  <input
+                    placeholder='Enter Product ID' 
+                    className="text-zinc-700 w-1/3 outline-none mx-auto border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 placeholder:text-center dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700" 
+                    type="text" 
+                    value={productId} 
+                    onChange={(e)=> setProductId(e.target.value)} 
+                  />
+                  <button className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/6 mx-auto rounded-lg transition-all
+                    hover:shadow-md hover:shadow-zinc-700" 
+                    onClick={handleSubmit}
+                  >
+                    Search
+                  </button>
+              <p className="mx-auto mt-3 text-red-500">{message}</p>
             </div>
 
             {
-              productId !== '' && product &&
-              <div>
-                <div className="ml-64">
-                    <h1 className="text-2xl">Product Name : {product.product_name}</h1>
-                    <h2 className="text-lg">Configuration : {product.configuration}</h2>
+              product &&
+              <div className="border-r-2 border-l-2 w-1/2 mx-auto rounded-lg">
+                <div className="pl-12 pt-6">
+                    <h1 className="text-3xl font-bold">{product.product_name}</h1>
+                    <h2 className="text-lg font-semibold text-zinc-600 dark:text-zinc-400">{product.configuration}</h2>
                 </div>
-                <div className="bg-indigo-300 flex flex-col w-2/3 mx-auto mt-4 rounded-lg gap-4 py-8 pl-36 mb-10">
-                  <label htmlFor="">Customer Name : </label>
-                  <input className="text-black w-1/4" type="text" value={customerName} onChange={(e)=> setCustomerName(e.target.value)} />
-                  <label htmlFor="">Contact NO : </label>
-                  <input className="text-black w-3/4" type="text" value={contactNo} onChange={(e)=> setContactNo(e.target.value)} />
-                  <label htmlFor="">Address : </label>
-                  <input className="text-black w-1/6" type="text" value={address} onChange={(e)=> setAddres(e.target.value)} />
-                  <label htmlFor="">Price : </label>
-                  <input className="text-black w-1/6" type="number" value={price} onChange={(e)=> setPrice(parseInt(e.target.value))} />
-                  <label htmlFor="">Due : </label>
-                  <input placeholder='BDT' className="text-black w-1/6" type="number" value={due} onChange={(e)=> setDue(parseInt(e.target.value))} />
-                  {sellMessage}
-                  <button className="bg-indigo-500 rounded-lg p-3 w-1/4 ml-64 hover:text-white transition-all" onClick={handleSell}>
+                <div className="flex flex-col w-3/4 mt-4 rounded-lg gap-y-8 py-8 pl-12 mb-10">  
+                  <input
+                    placeholder='Customer Name' 
+                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700" 
+                    type="text" 
+                    value={customerName} 
+                    onChange={(e)=> setCustomerName(e.target.value)} 
+                  />
+                  <input
+                    placeholder='Contact NO' 
+                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700" 
+                    type="text" 
+                    value={contactNo} 
+                    onChange={(e)=> setContactNo(e.target.value)} 
+                  />
+                  <input
+                    placeholder='Address' 
+                    className="text-zinc-700 w-1/2 outline-none border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700"  
+                    type="text" 
+                    value={address} 
+                    onChange={(e)=> setAddres(e.target.value)}
+                  />
+                  <input
+                    placeholder='Price in BDT' 
+                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700" 
+                    type="number"
+                    value={price} 
+                    onChange={(e)=> setPrice(parseInt(e.target.value))}
+                  />
+                  <input
+                    placeholder='Due BDT' 
+                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
+                    focus:border-b-2 focus:border-zinc-700" 
+                    type="number"
+                    value={due} 
+                    onChange={(e)=> setDue(parseInt(e.target.value))}
+                  />
+                  <p className="text-red-500">{sellMessage}</p>
+                  {/* <button className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-48 rounded-lg transition-all
+                    hover:shadow-md hover:shadow-zinc-700" 
+                    onClick={handleSell}
+                    >
                       Sell Product
-                  </button>
-            </div>
+                  </button> */}
+                  <AlertDialog>
+                    <AlertDialogTrigger 
+                    className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-48 rounded-lg transition-all
+                    hover:shadow-md hover:shadow-zinc-700"
+                    >
+                      Sell Product
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Product ID : {productId} <br />
+                          Product : {product.product_name} [{product.configuration}] <br />
+                          Name : {customerName} <br />
+                          contact : {contactNo} <br />
+                          {address !== '' && <span>Address : {address} <br /></span>}
+                          Selling Price : <span className="text-green-600">{price}</span> <br />
+                          { due > 0 && <span>Due : <span className="text-red-600">{due}</span></span> }
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleSell}>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
             }
+            <Toaster />
     </div>
   )
 }

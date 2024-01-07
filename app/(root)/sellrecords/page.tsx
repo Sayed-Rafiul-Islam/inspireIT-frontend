@@ -4,6 +4,20 @@ import { useEffect, useState } from "react";
 import { useUserAuth } from "../context/AuthContext";
 import { usePathname } from "next/navigation";
 
+import toast, { Toaster } from 'react-hot-toast';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 interface SellRecords {
   product_id : string,
   customer_name: string,
@@ -28,13 +42,13 @@ export default function SellRecords() {
   const [dueOnly, setDueOnly] = useState(false);
   const pages = Array.from(Array(pageCount).keys())
   const path = usePathname()
-  setActive(path)
 
       //  page count
       useEffect(()=>{
+        setActive(path)
         const accessToken = localStorage.getItem("accessToken")
         const getPageCount = async () => {
-            const res = await fetch(`http://localhost:5000/sellPageCount?accessToken=${accessToken}`,{cache : 'no-store'})
+            const res = await fetch(`http://localhost:5000/sellPageCount?due=${dueOnly}&accessToken=${accessToken}`,{cache : 'no-store'})
             const status = res.status
             if (status === 401 || status === 403) {
               logout()
@@ -44,13 +58,13 @@ export default function SellRecords() {
             }
         }
         getPageCount()
-    },[])
+    },[dueOnly])
 
     // Products
     useEffect(()=> {
       const accessToken = localStorage.getItem("accessToken")
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/sellRecords?page=${page}&search=${search}&accessToken=${accessToken}`,
+          const res = await fetch(`http://localhost:5000/sellRecords?due=${dueOnly}&page=${page}&search=${search}&accessToken=${accessToken}`,
           {cache : "no-store"}
           )
           const status = res.status
@@ -65,7 +79,7 @@ export default function SellRecords() {
           }
       }
       getProducts();
-  },[page,update])
+  },[page,update,dueOnly])
 
   
       const handleSearch = () => {
@@ -76,34 +90,57 @@ export default function SellRecords() {
         setUpdate(!update)
       }
 
+      const handleDelete = async (id : string) => {
+ 
+        const accessToken = localStorage.getItem("accessToken")
+        const res = await fetch(`http://localhost:5000/sellRecords?id=${id}&accessToken=${accessToken}`, {
+          method : "DELETE"
+      })
+      const status = res.status
+      if (status === 200) {
+          toast.success(`Sell Record for Product of ID : ${id} removed permenantly !`)
+          setUpdate(!update)
+         
+      }
+    
+  }
+
   return (
     <div>
-        <div className="flex">
-            <input className="w-1/4" placeholder="Product ID / Customer Name / Contact NO" type="text" value={search} onChange={e=>setSearch(e.target.value)} /><br />
-            <button className="ml-2" onClick={handleSearch}>Search</button>
+        <h1 className="text-4xl font-bold text-center my-6">Sell Records</h1>
+        <div className="flex justify-between w-11/12 mx-auto my-6">
+            <div className="flex w-5/6">
+                <input className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+                        dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
+                        focus:border-b-2 focus:border-zinc-700" 
+                        placeholder="Product ID / Customer Name / Contact NO" 
+                        type="text" 
+                        value={search} 
+                        onChange={e=>setSearch(e.target.value)} />
+                <button className="mx-5 mt-2 border-b-2 border-r-2 px-2 py-1 rounded-lg transition-all
+                        hover:shadow-md hover:shadow-zinc-700" onClick={handleSearch}>Search</button>
+                <button className="mt-2 border-b-2 border-r-2 px-2 py-1 rounded-lg transition-all
+                        hover:shadow-md hover:shadow-zinc-700" onClick={clearSearch}>Clear Search</button>
+            </div>
+            <button 
+            onClick={()=>setDueOnly(!dueOnly)}
+            className='border-b border-green-500 px-2 rounded-sm hover:text-green-500 transition-all'>{dueOnly ? "Showing Due Records" : "Showing All Records"}</button>
         </div>
-        <button onClick={clearSearch}>Clear Search</button>
-        <button
-        onClick={()=>setDueOnly(!dueOnly)}
-        className={dueOnly ? 
-        'text-white bg-blue-500 px-2 rounded-sm transition-all'
-         : 
-         'text-blue-500 border border-blue-500 px-2 rounded-sm transition-all'}>Due Records</button>
         <div className="w-11/12 flex mx-auto">
               <table className="w-full">
                 <thead>
                 <tr>
-                  <th>Serial No</th>
-                  <th>Customer Name</th> 
-                  <th>Contact NO</th>
-                  <th>Address</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Configuration</th>
-                  <th>Buying Price</th>
-                  <th>Selling Price</th>
-                  <th>Due</th>
-                  <th>Date</th>
+                  <th className="py-2">Serial No</th>
+                  <th className="py-2">Customer Name</th> 
+                  <th className="py-2">Contact NO</th>
+                  <th className="py-2">Address</th>
+                  <th className="py-2">Product ID</th>
+                  <th className="py-2">Product Name</th>
+                  <th className="py-2">Configuration</th>
+                  <th className="py-2">Buying Price</th>
+                  <th className="py-2">Selling Price</th>
+                  <th className="py-2">Due</th>
+                  <th className="py-2">Date</th>
                 </tr>
                 </thead>
 
@@ -130,18 +167,42 @@ export default function SellRecords() {
                     selling_price,
                     selling_date} : SellRecords,index) => {
                     if (due > 0) {
-                      return <tr key={index}>
-                      <td>{page*10 + index + 1}</td>
-                      <td>{customer_name}</td> 
-                      <td>{contact_no}</td> 
-                      <td>{address}</td>
-                      <td>{product_id}</td>
-                      <td>{product_name}</td>
-                      <td>{configuration}</td>
-                      <td>{buying_price} BDT</td>
-                      <td>{selling_price} BDT</td>
-                      <td>{due} BDT</td>
-                      <td>{selling_date.split("T")[0]}</td>
+                      return <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">
+                            <AlertDialog>
+                              <AlertDialogTrigger 
+                              className="hover:text-red-500 transition-all"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    You want to sell record of Product ID : <b className="text-green-500">{product_id}</b><br />
+                                    This action is a permenant one and cannot be <b className="text-red-500">undone !</b>
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={()=>handleDelete(product_id)}>Proceed</AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog> 
+                      </td>
                     </tr> 
                     } 
                          } )
@@ -155,18 +216,42 @@ export default function SellRecords() {
                     buying_price,
                     selling_price,
                     selling_date} : SellRecords,index) => 
-                          <tr key={index}>
-                            <td>{page*10 + index + 1}</td>
-                            <td>{customer_name}</td> 
-                            <td>{contact_no}</td> 
-                            <td>{address}</td>
-                            <td>{product_id}</td>
-                            <td>{product_name}</td>
-                            <td>{configuration}</td>
-                            <td>{buying_price} BDT</td>
-                            <td>{selling_price} BDT</td>
-                            <td>{due} BDT</td>
-                            <td>{selling_date.split("T")[0]}</td>
+                          <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700 px-5">
+                            <AlertDialog>
+                              <AlertDialogTrigger 
+                              className="hover:text-red-500 transition-all"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    You want to sell record of Product ID : <b className="text-green-500">{product_id}</b><br />
+                                    This action is a permenant one and cannot be <b className="text-red-500">undone !</b>
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={()=>handleDelete(product_id)}>Proceed</AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog> 
+                            </td>
                           </tr> 
                           )
                 }
@@ -190,6 +275,7 @@ export default function SellRecords() {
                 )
             }
         </div>
+        <Toaster />
     </div>
   )
 }
