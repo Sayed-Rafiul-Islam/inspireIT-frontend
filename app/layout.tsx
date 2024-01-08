@@ -23,16 +23,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <AuthContextProvider>
+
                  
-            <body className={inter.className}>
+            <body className={`${inter.className}`}>
+            <AuthContextProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               <Navbar />
               {children}
               </ThemeProvider>
+              </AuthContextProvider>
             </body>
         
-      </AuthContextProvider>
+
     </html>
   )
 }

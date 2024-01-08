@@ -1,0 +1,19 @@
+.lg-navbar {
+    display: block;
+}
+.sm-navbar {
+    display: none;
+}
+
+
+/* --------------------------------------------------- */
+
+@media (max-width: 640px) {
+    .lg-navbar {
+        display: none;
+    }
+    .sm-navbar {
+        display: block;
+    }
+    
+}

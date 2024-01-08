@@ -151,16 +151,20 @@ export default function AddMonthlyRecord() {
 }
 
   return (
-    <div>
+    <div className="pb-20 mt-20">
       <h1 className="text-center text-4xl font-bold my-6">Add Monthly Records</h1>
-      <div className="w-11/12 mx-auto">
-            <label className="text-green-500 mr-2" htmlFor="">From :</label>
-            <input type="date" value={startDate} onChange={e=>setStartDate(e.target.value)} />
-            <label className="text-red-500 mx-2" htmlFor="">To :</label> 
-            <input type="date" value={endDate} onChange={e=>setEndDate(e.target.value)} />
-            <button className="ml-2" onClick={dateSubmit}>Submit</button>
+      <div className="flex lg:flex-row flex-col w-11/12 lg:ml-16 ml-6 my-4">
+            <div>
+              <label className="text-green-500 mr-2" htmlFor="">From :</label>
+              <input type="date" value={startDate} onChange={e=>setStartDate(e.target.value)} />
+            </div>
+            <div>
+              <label className="text-red-500 lg:mx-2 mr-2 ml-5" htmlFor="">To :</label> 
+              <input type="date" value={endDate} onChange={e=>setEndDate(e.target.value)} />
+            </div>
+            <button className="lg:ml-2 ml-14 lg:mt-0 mt-2 lg:w-1/12 w-1/4" onClick={dateSubmit}>Search</button>
         </div>
-        <div className="w-11/12 flex mx-auto">
+        <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
               <table className="w-full">
                 <thead>
                 <tr>
@@ -198,17 +202,17 @@ export default function AddMonthlyRecord() {
                     selling_price,
                     selling_date} : SellRecords,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
                           </tr> 
                           )            
                   }      

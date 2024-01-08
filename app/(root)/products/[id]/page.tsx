@@ -1,11 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-
-
-
 import toast, { Toaster } from 'react-hot-toast';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -162,8 +158,9 @@ export default function Product({params} : any) {
                     key={index}
                     onClick={()=>setPage(number)} 
                     className={page === number
-                    ? 'px-3 py-1 mx-1 rounded-lg text-white bg-teal-500' 
-                    : 'px-2 mx-1 rounded-lg border-2 border-teal-500 text-teal-500 hover:text-white hover:bg-teal-500 transition-all'}
+                    ? 'px-2 text-white border-2 border-black bg-black mx-1 rounded-lg dark:text-black dark:bg-zinc-200 dark:border-zinc-200' 
+                    : `px-2 mx-1 rounded-md shadow-md text-black border border-black hover:bg-black hover:text-white
+                    dark:border-zinc-200 dark:text-zinc-200 dark:hover:text-black dark:hover:bg-zinc-200 transition-all`}
                     >{number + 1}
                 </button>
                 )

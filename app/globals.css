@@ -57,7 +57,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.input-wrapper {
-  columns: 2;
-}
