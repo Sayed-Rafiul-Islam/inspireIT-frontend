@@ -121,12 +121,11 @@ export default function MonthlyRevenue() {
                 <tbody className="text-center">
                 {   
               records.length === 0 ?
-              <tr className="text-red-400 text-center text-3xl font-bold">
-              <td className="mt-36" colSpan={8}>
-              No Records Found
-              </td>
-              
-            </tr>
+                  <tr className="text-red-400 text-3xl font-bold mt-36">
+                    <td className="" colSpan={9}>
+                      No Records Found
+                    </td>
+                  </tr>
             :
                   records.map(({
                     monthly_record_id,

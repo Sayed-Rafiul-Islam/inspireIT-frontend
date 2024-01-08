@@ -76,7 +76,7 @@ export default function Products() {
     <div>
         <h1 className="text-center text-5xl font-bold my-6">Inventory</h1>
         <div className="w-11/12 flex mx-auto">
-              <table className="w-full border-collapse border border-zinc-400 dark:border-zinc-700">
+              <table className="w-full border-collapse">
                 <thead>
                 <tr>
                   <th className="py-2">Serial No</th>
@@ -91,7 +91,7 @@ export default function Products() {
                 <tbody className="text-center">
                 {   
               products.length === 0 ?
-              <tr className="text-red-400 text-center text-3xl font-bold">
+              <tr className="text-red-400 text-3xl font-bold">
               <td colSpan={6}>
               No Products Found
               </td>

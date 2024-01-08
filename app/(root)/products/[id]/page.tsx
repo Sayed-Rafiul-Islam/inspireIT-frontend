@@ -114,7 +114,14 @@ export default function Product({params} : any) {
 
                 <tbody className="text-center">
                 {   
-              productIds.length !== 0 &&
+              productIds.length === 0 ?
+              <tr className="text-red-400 text-3xl font-bold">
+              <td colSpan={2}>
+              No Products Found
+              </td>
+              
+            </tr>
+            :
                   productIds.map(({product_id} : ProductIds,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
                             <td className="py-2">{page*10 + index + 1}</td>

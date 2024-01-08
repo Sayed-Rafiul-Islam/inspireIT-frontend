@@ -181,8 +181,8 @@ export default function AddMonthlyRecord() {
                 <tbody className="text-center">
                   {
                     products.length === 0 ?
-                    <tr className="text-red-400 text-center text-3xl font-bold">
-                      <td className="mt-36" colSpan={8}>
+                    <tr className="text-red-400 text-3xl font-bold">
+                      <td className="mt-36" colSpan={11}>
                       No Records Found
                       </td> 
                     </tr>
