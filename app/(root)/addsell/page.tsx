@@ -6,7 +6,6 @@ import { addSell } from "../actions/addSell"
 import { useUserAuth } from "../context/AuthContext"
 import { usePathname } from "next/navigation"
 import toast, { Toaster } from 'react-hot-toast';
-import '../../globals.css'
 
 import {
   AlertDialog,
@@ -19,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from "../actions/accessProvider"
 
 interface Product {
   product_id : string,
@@ -30,8 +30,9 @@ interface Product {
 
 export default function AddSell() {
   
-  const [accessToken,setAccessToken] = useState<string | null>(null)
-  const {logout,setActive} = useUserAuth()
+  const path = usePathname()
+  accessProvider(path)
+
   const [productId,setProductId] = useState('')
   const [product,setProduct] = useState<Product | null>(null)
   const [customerName,setCustomerName] = useState('')
@@ -41,26 +42,15 @@ export default function AddSell() {
   const [due,setDue] = useState<number>(0)
   const [message,setMessage] = useState('')
   const [sellMessage,setSellMessage] = useState('')
-  const path = usePathname()
-
-
-  useEffect(()=>{
-    const access = localStorage.getItem("accessToken")
-    setAccessToken(access)
-    setActive(path)
-  },[])
 
   const handleSubmit = async () => {
     if (productId === '') {
       setMessage('Enter Product ID')
     } else {
-      const {status,product} = await findProductById(productId,accessToken)
+      const {status,product} = await findProductById(productId)
       if(status === 200) {
         setProduct(product)
         setMessage('')
-        
-      } else if (status === 401 || status === 403) {
-        logout()
       } else {
         setProduct(null)
         setMessage("No product by that ID in the inventory")
@@ -86,7 +76,6 @@ export default function AddSell() {
           selling_price : price,
           due:due,
           source_name : product.source_name,
-          accessToken
         }
         const status =  await addSell(data)
         if (status === 200) {
@@ -99,8 +88,6 @@ export default function AddSell() {
           setAddres('')
           setPrice(0)
           setDue(0)
-        } else if (status === 401 || status === 403) {
-          logout()
         } else if (status === 500) {
           setProductId('')
           setProduct(null)
@@ -197,12 +184,6 @@ export default function AddSell() {
                     onChange={(e)=> setDue(parseInt(e.target.value))}
                   />
                   <p className="text-red-500">{sellMessage}</p>
-                  {/* <button className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-48 rounded-lg transition-all
-                    hover:shadow-md hover:shadow-zinc-700" 
-                    onClick={handleSell}
-                    >
-                      Sell Product
-                  </button> */}
                   <AlertDialog>
                     <AlertDialogTrigger 
                     className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-48 rounded-lg transition-all

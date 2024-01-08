@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import './module.product.css'
-import { useUserAuth } from "../../context/AuthContext"
+
+
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -30,7 +30,6 @@ interface ProductIds {
 
 export default function Product({params} : any) {
 
-    const {logout} = useUserAuth()
     const [info,setInfo] = useState<Info | null>(null)
     const [productIds,setProductIds] = useState([])
     const [pageCount, setPageCount] = useState(0);
@@ -39,58 +38,39 @@ export default function Product({params} : any) {
     const pages = Array.from(Array(pageCount).keys())
 
 
+    // get info
     useEffect(()=>{
-      const accessToken = localStorage.getItem("accessToken")
+      const getInfo = async () => {
+          const res = await fetch(`http://localhost:5000/inventoryItem?id=${params.id}`)
+          const data = await res.json()
+          setInfo(data)   
+      }
+      getInfo();
+    },[])
+
+    // get page count 
+    useEffect(()=>{
       const getPageCount = async () => {
         if (info) {
           const {product_name,configuration,source_name,unit_price} = info
-          const res = await fetch(`http://localhost:5000/productsPageCount?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&accessToken=${accessToken}`)
-          const status = res.status
-          if (status === 401 || status === 403) {
-              logout()
-          } else {
-            const data = await res.json()
-            setPageCount(data)
-          }
-          
+          const res = await fetch(`http://localhost:5000/productsPageCount?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}`)
+          const data = await res.json()
+          setPageCount(data)
         }
-          
       }
-      getPageCount();
-  },[page,info,update])
+        getPageCount();
+    },[page,info,update])
 
-    useEffect(()=>{
-      const accessToken = localStorage.getItem("accessToken")
-        const getInfo = async () => {
-            const res = await fetch(`http://localhost:5000/inventoryItem?id=${params.id}&accessToken=${accessToken}`)
-            const status = res.status
-            if (status === 401 || status === 403) {
-                logout()
-            } else {
-              const data = await res.json()
-              setInfo(data)
-            }
-            
-        }
-        getInfo();
-    },[])
+
 
     useEffect(()=>{
         const getProductIds = async () => {
-          const accessToken = localStorage.getItem("accessToken")
           if (info) {
             const {product_name,configuration,source_name,unit_price} = info
-            const res = await fetch(`http://localhost:5000/productIds?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&page=${page}&accessToken=${accessToken}`)
-            const status = res.status
-            if (status === 401 || status === 403) {
-                logout()
-            } else {
-              const data = await res.json()
-              setProductIds(data)
-            }
-            
-          }
-            
+            const res = await fetch(`http://localhost:5000/productIds?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&page=${page}`)
+            const data = await res.json()
+            setProductIds(data)
+          }   
         }
         getProductIds();
     },[page,info,update])
@@ -98,8 +78,7 @@ export default function Product({params} : any) {
     const handleDelete = async (id : string) => {
           if (info) {
             const {product_name,configuration,source_name,unit_price} = info
-            const accessToken = localStorage.getItem("accessToken")
-            const res = await fetch(`http://localhost:5000/product?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&id=${id}&accessToken=${accessToken}`, {
+            const res = await fetch(`http://localhost:5000/product?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&id=${id}`, {
               method : "DELETE"
           })
           const status = res.status

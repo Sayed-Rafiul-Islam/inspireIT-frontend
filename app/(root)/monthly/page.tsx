@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useUserAuth } from "../context/AuthContext"
+import { useState } from "react"
 import { usePathname } from "next/navigation"
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from "../actions/accessProvider";
 
 interface Records {
     monthly_record_id : number,
@@ -30,50 +30,29 @@ interface Records {
 }
 
 export default function MonthlyRevenue() {
-    const [accessToken,setAccessToken] = useState<string | null>(null)
-    const {logout,setActive} = useUserAuth()
     const path = usePathname()
+    accessProvider(path)
     const [month,setMonth] = useState('01')
     const [year,setYear] = useState('')
     const [records,setRecords] = useState([])
-
-
-    useEffect(()=>{
-      setActive(path)
-      const varify = async () => {
-          const access = localStorage.getItem("accessToken")
-          setAccessToken(access)
-          const res = await fetch(`http://localhost:5000/varify?accessToken=${access}`,{cache : "no-store"})
-          const status = res.status
-          if (status === 401 || status === 403) {
-            logout()
-          }
-      }
-      varify()
-    },[])
 
     const dateSubmit = async () => {
         if (year === '') {
             alert("Enter Date")
         } else {
             const date = month + "/" + year
-            const res = await fetch(`http://localhost:5000/monthlyRecords?record_date=${date}&accessToken=${accessToken}`,{cache : "no-store"})
+            const res = await fetch(`http://localhost:5000/monthlyRecords?record_date=${date}`,{cache : "no-store"})
             const status = res.status
-          if (status === 401 || status === 403) {
-            logout()
-          }
-          else if (status === 200) {
+          if (status === 200) {
                 const records = await res.json()
                 setRecords(records)
             }
 
         }
     }
-
     const handleDelete = async (id : number) => {
  
-      const accessToken = localStorage.getItem("accessToken")
-      const res = await fetch(`http://localhost:5000/monthlyRecord?id=${id}&accessToken=${accessToken}`, {
+      const res = await fetch(`http://localhost:5000/monthlyRecord?id=${id}`, {
         method : "DELETE"
     })
     const status = res.status

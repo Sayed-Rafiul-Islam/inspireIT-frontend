@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react"
-import { useUserAuth } from "../context/AuthContext";
 import { usePathname } from "next/navigation";
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -18,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from "../actions/accessProvider";
 
 interface Product {
   id : number,
@@ -30,66 +30,44 @@ interface Product {
 
 
 export default function Products() {
-
-  const {logout,setActive} = useUserAuth()
   const path = usePathname()
+  accessProvider(path)
   const [products, setProducts] = useState([])
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
   const [update, setUpdate] = useState(false);
   const pages = Array.from(Array(pageCount).keys())
 
-      //  page count
-      useEffect(()=>{
-        const accessToken = localStorage.getItem("accessToken")
-        const getPageCount = async () => {
-            const res = await fetch(`http://localhost:5000/inventoryPageCount?accessToken=${accessToken}`,{cache : "no-store"})
-            const status = res.status
-            if (status === 403 || status === 401) {
-              logout()
-              setProducts([])
-          } else {
-              const pageCount = await res.json()
-              setPageCount(Math.ceil(pageCount))
-          }
-            
-        }
-        getPageCount()
-    },[update])
+  //  page count
+  useEffect(()=>{
+    const getPageCount = async () => {
+        const res = await fetch(`http://localhost:5000/inventoryPageCount`,{cache : "no-store"})
+        const pageCount = await res.json()
+        setPageCount(Math.ceil(pageCount))
+    }
+    getPageCount()
+  },[update])
 
     // Products
-    useEffect(()=> {
-      const accessToken = localStorage.getItem("accessToken")
-      setActive(path)
-      
-      const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/inventory?page=${page}&accessToken=${accessToken}`,{cache : "no-store"})
-          const status = res.status
-          if (status === 403 || status === 401) {
-              logout()
-              setProducts([])
-          } else {
-            const data = await res.json()
-            setProducts(data)
-          }
-          
-      }
-      getProducts();
+  useEffect(()=> { 
+    const getProducts = async () => {
+      const res = await fetch(`http://localhost:5000/inventory?page=${page}`,{cache : "no-store"})
+      const data = await res.json()
+      setProducts(data)        
+     }
+    getProducts();
   },[page,update])
 
 
   const handleDelete = async (id : number) => {
- 
-      const accessToken = localStorage.getItem("accessToken")
-      const res = await fetch(`http://localhost:5000/inventory?id=${id}&accessToken=${accessToken}`, {
-        method : "DELETE"
+    const res = await fetch(`http://localhost:5000/inventory?id=${id}`, {
+      method : "DELETE"
     })
     const status = res.status
     if (status === 200) {
         toast.success(`Row removed permenantly !`)
         setUpdate(!update)
     }
-  
 }
 
 

@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from "../actions/accessProvider";
 
 interface SellRecords {
   product_id : string,
@@ -34,9 +35,8 @@ interface SellRecords {
 
 export default function AddMonthlyRecord() {
 
-  const {logout,setActive} = useUserAuth()
   const path = usePathname()
-  const [accessToken,setAccessToken] = useState<string | null>(null)
+  accessProvider(path)
   const [products, setProducts] = useState([])
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -53,27 +53,16 @@ export default function AddMonthlyRecord() {
   const [show,setShow] = useState(false)
   const pages = Array.from(Array(pageCount).keys())
 
-
-  useEffect(()=>{
-    const access = localStorage.getItem("accessToken")
-    setAccessToken(access)
-    setActive(path)
-  },[])
-
     //  page count
     useEffect(()=>{
       const accessToken = localStorage.getItem("accessToken")
         const getPageCount = async () => {
             const res = await fetch(`http://localhost:5000/sellRecordsByDatePageCount?from=${startDate}&to=${endDate}&accessToken=${accessToken}`,
             {cache : 'no-store'})
-            const status = res.status
-            if (status === 401 || status === 403) {
-              logout()
-            } else {
-              const pageCount = await res.json()
-              setPageCount(Math.ceil(pageCount))
-            }
+            const pageCount = await res.json()
+            setPageCount(Math.ceil(pageCount))
         }
+        
         if (startDate !== '' && endDate !== '') {
             getPageCount();
             setUpdate(!update)
@@ -82,15 +71,10 @@ export default function AddMonthlyRecord() {
 
     // Products
     useEffect(()=> {
-      const accessToken = localStorage.getItem("accessToken")
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}&accessToken=${accessToken}`,
+          const res = await fetch(`http://localhost:5000/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}`,
           {cache : "no-store"}
           )
-          const status = res.status
-          if (status === 401 || status === 403) {
-            logout()
-          } else {
             const products = await res.json()
             setProducts(products)
             if (products.length) {
@@ -103,7 +87,7 @@ export default function AddMonthlyRecord() {
                       totalDue= totalDue + due
                       
               })
-            }
+            
             setBuyingPrice(buyingPrice)
             setSellingPrice(sellingPrice)
             setTotalDue(totalDue)
@@ -126,7 +110,7 @@ export default function AddMonthlyRecord() {
         profit : calculation,
         record_date : date
     }
-    const res = await fetch(`http://localhost:5000/addMonthly?accessToken=${accessToken}`, {
+    const res = await fetch(`http://localhost:5000/addMonthly`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

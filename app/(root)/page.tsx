@@ -1,20 +1,12 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useUserAuth } from "./context/AuthContext"
-import { useEffect } from "react"
+import accessProvider from "./actions/accessProvider"
 
 
 export default function Home() {
-  const {logout,setActive} = useUserAuth()
   const path = usePathname()
-
-
-  useEffect(()=>{
-    setActive(path)
-  },[])
-
-
+  accessProvider(path)
     return (
       <div>
           Root Page

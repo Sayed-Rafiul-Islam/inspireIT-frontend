@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from "../actions/accessProvider";
 
 interface SellRecords {
   product_id : string,
@@ -33,7 +34,8 @@ interface SellRecords {
 
 export default function SellRecords() {
 
-  const {logout,setActive} = useUserAuth()
+  const path = usePathname()
+  accessProvider(path)
   const [products, setProducts] = useState([])
   const [update,setUpdate] = useState(false)
   const [search,setSearch] = useState('')
@@ -41,37 +43,25 @@ export default function SellRecords() {
   const [page, setPage] = useState(0);
   const [dueOnly, setDueOnly] = useState(false);
   const pages = Array.from(Array(pageCount).keys())
-  const path = usePathname()
 
       //  page count
       useEffect(()=>{
-        setActive(path)
-        const accessToken = localStorage.getItem("accessToken")
         const getPageCount = async () => {
-            const res = await fetch(`http://localhost:5000/sellPageCount?due=${dueOnly}&accessToken=${accessToken}`,{cache : 'no-store'})
-            const status = res.status
-            if (status === 401 || status === 403) {
-              logout()
-            } else {
+            const res = await fetch(`http://localhost:5000/sellPageCount?due=${dueOnly}`,{cache : 'no-store'})
               const pageCount = await res.json()
               setPageCount(Math.ceil(pageCount))
-            }
         }
         getPageCount()
     },[dueOnly])
 
-    // Products
+    // Sell Records
     useEffect(()=> {
-      const accessToken = localStorage.getItem("accessToken")
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/sellRecords?due=${dueOnly}&page=${page}&search=${search}&accessToken=${accessToken}`,
+          const res = await fetch(`http://localhost:5000/sellRecords?due=${dueOnly}&page=${page}&search=${search}`,
           {cache : "no-store"}
           )
           const status = res.status
-          if (status === 401 || status === 403) {
-            logout()
-          }
-          else if (status === 404) {
+          if (status === 404) {
             setProducts([])
           } else if (status === 200) {
             const products = await res.json()
@@ -91,9 +81,7 @@ export default function SellRecords() {
       }
 
       const handleDelete = async (id : string) => {
- 
-        const accessToken = localStorage.getItem("accessToken")
-        const res = await fetch(`http://localhost:5000/sellRecords?id=${id}&accessToken=${accessToken}`, {
+        const res = await fetch(`http://localhost:5000/sellRecords?id=${id}`, {
           method : "DELETE"
       })
       const status = res.status

@@ -11,11 +11,10 @@ interface Data {
     selling_price : number,
     due : number,
     source_name : string,
-    accessToken : string | null
 }
 
 export const addSell = async (data : Data) => {
-    const res = await fetch(`http://localhost:5000/addSell?accessToken=${data.accessToken}`, {
+    const res = await fetch(`http://localhost:5000/addSell`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

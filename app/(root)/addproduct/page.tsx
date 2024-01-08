@@ -16,24 +16,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import accessProvider from '../actions/accessProvider'
 
 export default function AddProduct() {
 
-  const [accessToken,setAccessToken] = useState<string | null>(null)
-  const {logout,setActive} = useUserAuth()
   const path = usePathname()
+  accessProvider(path)
   const [productId,setProductId] = useState('')
   const [productName,setProductName] = useState('')
   const [configuration,setConfiguration] = useState('')
   const [sourceName,setSourceName] = useState('')
   const [unitPrice,setUnitPrice] = useState<number>(0)
   const [message,setMessage] = useState('')
-
-  useEffect(()=>{
-    const access = localStorage.getItem("accessToken")
-    setAccessToken(access)
-    setActive(path)
-  },[])
   
   const handleSubmit = async () => {
     
@@ -42,7 +36,7 @@ export default function AddProduct() {
         alert("Invalid input")
         setMessage('')
       } else {
-        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice,accessToken)
+        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice)
         if (status === 200) {
             setMessage("")
             setProductId('')
@@ -64,8 +58,6 @@ export default function AddProduct() {
           toast.error("Product ID already in use")
           setProductId('')
           setMessage('')
-        } else if (status === 401 || status === 403) {
-            logout();
         } else {
           setMessage("Something went wrong")
           setProductId('')

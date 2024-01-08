@@ -1,19 +1,11 @@
 "use client"
 import SignUpForm from "@/components/SignUpForm";
-import { useEffect, useState } from "react";
-import { useUserAuth } from "../context/AuthContext";
+import { useState } from "react";
 import LogInForm from "@/components/LogInForm";
 
 
 export default function Authentication() {
     const [account,setAccount] = useState(true)
-    const [user,setUser] = useState<boolean | null>(null)
-    useEffect(()=>{
-        const accessToken : string | null = localStorage.getItem("accessToken")
-        const isUser = accessToken ? true : false
-        setUser(isUser)
-    },[user])
-
   return (
     <div className='flex justify-center'>
         {
