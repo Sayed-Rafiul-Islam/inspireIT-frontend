@@ -42,6 +42,20 @@ export default function AddSell() {
   const [due,setDue] = useState<number>(0)
   const [message,setMessage] = useState('')
   const [sellMessage,setSellMessage] = useState('')
+  const input = `text-zinc-700 w-2/3 outline-none border-b border-zinc-300
+    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
+    focus:border-b-2 focus:border-zinc-700`
+
+  const clearFields = () => {
+    setProductId('')
+    setProduct(null)
+    setSellMessage('')
+    setCustomerName('')
+    setContactNo('')
+    setAddres('')
+    setPrice(0)
+    setDue(0)
+  }
 
   const handleSubmit = async () => {
     if (productId === '') {
@@ -80,34 +94,17 @@ export default function AddSell() {
         const status =  await addSell(data)
         if (status === 200) {
           toast.success('Record Added to the sell Records')
-          setProductId('')
-          setProduct(null)
-          setSellMessage('')
-          setCustomerName('')
-          setContactNo('')
-          setAddres('')
-          setPrice(0)
-          setDue(0)
+          clearFields()
         } else if (status === 500) {
           setProductId('')
           setProduct(null)
           setSellMessage('Product ID already in use')
         } else {
-          alert("Something went wrong")
-          setProductId('')
-          setProduct(null)
-          setSellMessage('')
-          setSellMessage('')
-          setCustomerName('')
-          setContactNo('')
-          setAddres('')
-          setPrice(0)
-          setDue(0)
+          toast.error("Something went wrong ! Try again")
+          clearFields()
         }
       }
     }
-
-
   return (
     <div>
       <h1 className='text-4xl font-bold text-center mt-10'>Sell Product</h1>
@@ -115,7 +112,7 @@ export default function AddSell() {
                   <input
                     placeholder='Enter Product ID' 
                     className="text-zinc-700 w-1/3 outline-none mx-auto border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 placeholder:text-center dark:text-zinc-300 dark:bg-black
+                    dark:border-zinc-700 dark:placeholder:text-zinc-700 placeholder:text-center dark:text-zinc-300 dark:bg-inherit
                     focus:border-b-2 focus:border-zinc-700" 
                     type="text" 
                     value={productId} 
@@ -140,45 +137,35 @@ export default function AddSell() {
                 <div className="flex flex-col w-3/4 mt-4 rounded-lg gap-y-8 py-8 pl-12 mb-10">  
                   <input
                     placeholder='Customer Name' 
-                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
-                    focus:border-b-2 focus:border-zinc-700" 
+                    className={input} 
                     type="text" 
                     value={customerName} 
                     onChange={(e)=> setCustomerName(e.target.value)} 
                   />
                   <input
                     placeholder='Contact NO' 
-                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
-                    focus:border-b-2 focus:border-zinc-700" 
+                    className={input} 
                     type="text" 
                     value={contactNo} 
                     onChange={(e)=> setContactNo(e.target.value)} 
                   />
                   <input
                     placeholder='Address' 
-                    className="text-zinc-700 w-1/2 outline-none border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
-                    focus:border-b-2 focus:border-zinc-700"  
+                    className={input} 
                     type="text" 
                     value={address} 
                     onChange={(e)=> setAddres(e.target.value)}
                   />
                   <input
                     placeholder='Price in BDT' 
-                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
-                    focus:border-b-2 focus:border-zinc-700" 
+                    className={input}
                     type="number"
                     value={price} 
                     onChange={(e)=> setPrice(parseInt(e.target.value))}
                   />
                   <input
                     placeholder='Due BDT' 
-                    className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
-                    dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-black
-                    focus:border-b-2 focus:border-zinc-700" 
+                    className={input} 
                     type="number"
                     value={due} 
                     onChange={(e)=> setDue(parseInt(e.target.value))}
