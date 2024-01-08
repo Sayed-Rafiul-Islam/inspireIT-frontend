@@ -302,17 +302,8 @@ export default function AddMonthlyRecord() {
                               <AlertDialogAction onClick={addToMonthly}>Add to Monthly Records</AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
-            </AlertDialog>
-            
+            </AlertDialog>           
             </div>
-            {/* {
-                calculation !== null && 
-                <div>
-                    <h1>Total Profit : {calculation}</h1>
-                    <button onClick={addToMonthly}>Add to Monthly Records</button>
-                </div>
-                
-            } */}
         </div>
         }
         <Toaster />
