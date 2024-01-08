@@ -66,10 +66,10 @@ export default function MonthlyRevenue() {
 
 
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
       <h1 className="text-center text-4xl font-bold my-6">Monthly Records</h1>
-       <div className="flex w-11/12 mx-auto my-5 items-center">
-            <div>
+       <div className="flex lg:flex-row flex-col w-11/12 mx-auto lg:items-center my-5 ">
+            <div className="lg:m-0 mb-4">
                 <select name="month" onChange={(e)=>setMonth(e.target.value)}>
                     <option value="01">January</option>
                     <option value="02">February</option>
@@ -85,10 +85,10 @@ export default function MonthlyRevenue() {
                     <option value="12">December</option>
                 </select>
             </div>
-            <div className="mx-6">
+            <div className="lg:mx-6">
               <input className="text-zinc-700 outline-none border-b border-zinc-300
                 dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
-                focus:border-b-2 focus:border-zinc-700 placeholder:text-center" 
+                focus:border-b-2 focus:border-zinc-700 placeholder:text-center lg:w-full w-1/4"  
                 placeholder="Year" 
                 type="text" 
                 value={year} 
@@ -96,37 +96,33 @@ export default function MonthlyRevenue() {
               />
             </div>
             <button className="border-b-2 border-r-2 px-6 py-1 rounded-lg transition-all
-                    hover:shadow-md hover:shadow-zinc-700" 
+                    hover:shadow-md hover:shadow-zinc-700 lg:w-1/6 w-1/4 lg:mt-0 mt-4" 
                     onClick={dateSubmit}>
                     Search
             </button>
 
        </div>
-       <div className="w-11/12 mx-auto">
-       <table className="w-full">
+       <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
+            {
+              records.length === 0 ?
+              <h1 className="text-red-500 text-3xl text-center">No Records Found</h1>
+              :
+              <table className="w-full">
                 <thead>
-                <tr>
-                  <th className="py-2">Serial No</th>
-                  <th className="py-2">Bought</th> 
-                  <th className="py-2">Sold</th>
-                  <th className="py-2">Employee Bill</th>
-                  <th className="py-2">Additional Costs</th>
-                  <th className="py-2">Dues</th>
-                  <th className="py-2">Profits</th>
-                  <th className="py-2">Record ID</th>
-                  <th className="py-2">Date</th>
-                </tr>
+                  <tr>
+                    <th className="py-2">Serial No</th>
+                    <th className="py-2">Bought</th> 
+                    <th className="py-2">Sold</th>
+                    <th className="py-2">Employee Bill</th>
+                    <th className="py-2">Additional Costs</th>
+                    <th className="py-2">Dues</th>
+                    <th className="py-2">Profits</th>
+                    <th className="py-2">Record ID</th>
+                    <th className="py-2">Date</th>
+                  </tr>
                 </thead>
-
                 <tbody className="text-center">
                 {   
-              records.length === 0 ?
-                  <tr className="text-red-400 text-3xl font-bold mt-36">
-                    <td className="" colSpan={9}>
-                      No Records Found
-                    </td>
-                  </tr>
-            :
                   records.map(({
                     monthly_record_id,
                     bought,
@@ -137,16 +133,16 @@ export default function MonthlyRevenue() {
                     profit,
                     record_date} : Records,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={monthly_record_id}>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{index + 1}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{bought} BDT</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{sold} BDT</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{employee} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{additionals} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{profit} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{monthly_record_id}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{record_date}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{index + 1}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{bought} BDT</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{sold} BDT</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{employee} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{additionals} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{profit} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{monthly_record_id}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{record_date}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
                             <AlertDialog>
                               <AlertDialogTrigger 
                               className="hover:text-red-500 transition-all"
@@ -174,8 +170,9 @@ export default function MonthlyRevenue() {
                           )  
                         }
                         
-                        </tbody>
+                </tbody>
               </table>
+            }
        </div>
        <Toaster />
     </div>

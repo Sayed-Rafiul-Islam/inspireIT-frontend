@@ -9,7 +9,7 @@ export default function Home() {
   accessProvider(path)
     return (
       <div>
-          Root Page
+          <h1 className="text-center mt-52">Home</h1>
       </div>
     )
   }

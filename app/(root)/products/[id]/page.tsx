@@ -86,21 +86,25 @@ export default function Product({params} : any) {
       }
 
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
       {
         info ? 
         <div className="ml-16 mt-8 mb-6">
-          <h1 className="text-4xl font-bold">Product Name : <span>{info.product_name}</span></h1>
-          <h2 className="text-2xl font-semibold">Configuration : <span>{info.configuration}</span></h2>
-          <p>Source : {info.source_name}</p>
-          <p className="font-bold">Price : <span className="text-green-500">{info.unit_price}</span> BDT</p>
+          <h1 className="lg:text-4xl text-2xl font-bold">Product Name : <span>{info.product_name}</span></h1>
+          <h2 className="lg:text-2xl text-lg font-semibold">Configuration : <span>{info.configuration}</span></h2>
+          <p className="lg:text-md text-sm">Source : {info.source_name}</p>
+          <p className="font-bold lg:text-md text-sm">Price : <span className="text-green-500">{info.unit_price}</span> BDT</p>
         </div>
         :
         ''
       }
-      <div className="">
+      <div>
         <div className="w-11/12 flex mx-auto">
-              <table className="w-full">
+          {
+            productIds.length === 0 ?
+            <h1 className="text-red-500 text-3xl mx-auto">No Products Found</h1>
+            :
+            <table className="w-full">
                 <thead>
                 <tr>
                   <th>Serial No</th>
@@ -110,14 +114,6 @@ export default function Product({params} : any) {
 
                 <tbody className="text-center">
                 {   
-              productIds.length === 0 ?
-              <tr className="text-red-400 text-3xl font-bold">
-              <td colSpan={2}>
-              No Products Found
-              </td>
-              
-            </tr>
-            :
                   productIds.map(({product_id} : ProductIds,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
                             <td className="py-2">{page*10 + index + 1}</td>
@@ -150,6 +146,8 @@ export default function Product({params} : any) {
                         }   
                 </tbody>
             </table>
+          }
+              
         </div>
         <div className='flex justify-center pb-10 mt-2'>
             {   pageCount > 1 &&

@@ -27,7 +27,7 @@ export default function AddProduct() {
   const [configuration,setConfiguration] = useState('')
   const [sourceName,setSourceName] = useState('')
   const [unitPrice,setUnitPrice] = useState<number>(0)
-  const input = `text-zinc-700 w-2/3 outline-none border-b border-zinc-300
+  const input = `text-zinc-700 lg:w-2/3 outline-none border-b border-zinc-300
   dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
   focus:border-b-2 focus:border-zinc-700`
 
@@ -64,9 +64,9 @@ export default function AddProduct() {
   }
   
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
         <h1 className='text-4xl font-bold text-center mt-10'>ADD NEW PRODUCT</h1>
-        <div className="border-r-2 border-l-2 flex flex-col w-2/3 mx-auto mt-4 rounded-lg gap-y-8 py-8 pl-64">
+        <div className="border-r-2 border-l-2 flex flex-col w-2/3 mx-auto mt-10 rounded-lg gap-y-8 py-8 lg:pl-64 px-4">
             <input 
             placeholder='Product ID'
             className={input} 
@@ -104,7 +104,7 @@ export default function AddProduct() {
               productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice ||
               <AlertDialog>
                     <AlertDialogTrigger 
-                    className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-12 rounded-lg transition-all
+                    className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 lg:ml-12 mx-auto rounded-lg transition-all
                     hover:shadow-md hover:shadow-zinc-700"
                     >
                       Sell Product

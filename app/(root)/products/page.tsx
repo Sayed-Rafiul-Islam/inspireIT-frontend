@@ -73,10 +73,14 @@ export default function Products() {
 
 
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
         <h1 className="text-center text-5xl font-bold my-6">Inventory</h1>
-        <div className="w-11/12 flex mx-auto">
-              <table className="w-full border-collapse">
+        <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
+          {
+            products.length === 0 ?
+            <h1 className="text-red-500 text-3xl mx-auto">No Products Found</h1>
+            :
+            <table className="w-full border-collapse">
                 <thead>
                 <tr>
                   <th className="py-2">Serial No</th>
@@ -89,28 +93,20 @@ export default function Products() {
                 </thead>
 
                 <tbody className="text-center">
-                {   
-              products.length === 0 ?
-              <tr className="text-red-400 text-3xl font-bold">
-              <td colSpan={6}>
-              No Products Found
-              </td>
-              
-            </tr>
-            :
+                {
                   products.map(({id,product_name,configuration,source_name,unit_price,quantity} : Product,index) => {
                     if (product_name) {
                       return (
                         <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700" >{page*10 + index+1}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700 hover:text-green-600" >
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{page*10 + index+1}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700 hover:text-green-600" >
                               <Link href={quantity < 1 ? `` :`/products/${id}`}>{product_name}</Link>
                             </td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700" >{configuration}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700" >{source_name}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700" >{unit_price} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700" >{quantity < 1 ? <span className="text-red-600 font-bold">Sold Out</span> : quantity}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{configuration}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{source_name}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{unit_price} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{quantity < 1 ? <span className="text-red-600 font-bold">Sold Out</span> : quantity}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
                             <AlertDialog>
                               <AlertDialogTrigger 
                               className="hover:text-red-500 transition-all"
@@ -142,6 +138,8 @@ export default function Products() {
                         }   
                 </tbody>
             </table>
+          }
+              
         </div>
         <div className='flex justify-center pb-10 mt-10'>
             {   pageCount > 0 &&

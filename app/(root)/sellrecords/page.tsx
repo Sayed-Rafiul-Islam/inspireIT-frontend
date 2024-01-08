@@ -94,28 +94,32 @@ export default function SellRecords() {
   }
 
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
         <h1 className="text-4xl font-bold text-center my-6">Sell Records</h1>
         <div className="flex justify-between w-11/12 mx-auto my-6">
-            <div className="flex w-5/6">
-                <input className="text-zinc-700 w-1/3 outline-none border-b border-zinc-300
+            <div className="flex lg:flex-row flex-col lg:w-5/6 w-1/2">
+                <input className="text-zinc-700 lg:w-1/3 w-full outline-none border-b border-zinc-300
                         dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
                         focus:border-b-2 focus:border-zinc-700" 
                         placeholder="Product ID / Customer Name / Contact NO" 
                         type="text" 
                         value={search} 
                         onChange={e=>setSearch(e.target.value)} />
-                <button className="mx-5 mt-2 border-b-2 border-r-2 px-2 py-1 rounded-lg transition-all
-                        hover:shadow-md hover:shadow-zinc-700" onClick={handleSearch}>Search</button>
+                <button className="lg:mx-5 mt-2 border-b-2 border-r-2 px-2 py-1 rounded-lg transition-all
+                        hover:shadow-md hover:shadow-zinc-700 lg:w-1/6 w-1/2" onClick={handleSearch}>Search</button>
                 <button className="mt-2 border-b-2 border-r-2 px-2 py-1 rounded-lg transition-all
-                        hover:shadow-md hover:shadow-zinc-700" onClick={clearSearch}>Clear Search</button>
+                        hover:shadow-md hover:shadow-zinc-700 lg:w-1/6 w-2/3" onClick={clearSearch}>Clear Search</button>
             </div>
             <button 
             onClick={()=>setDueOnly(!dueOnly)}
-            className='border-b border-green-500 px-2 rounded-sm hover:text-green-500 transition-all'>{dueOnly ? "Showing Due Records" : "Showing All Records"}</button>
+            className='border-b border-green-500 px-2 h-12 rounded-sm hover:text-green-500 transition-all lg:w-1/6 w-1/3 lg:mt-0 mt-10'>{dueOnly ? "Showing Due Records" : "Showing All Records"}</button>
         </div>
-        <div className="w-11/12 flex mx-auto">
-              <table className="w-full">
+        <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
+          {
+            products.length === 0 ?
+            <h1 className="text-red-500 text-3xl mx-auto">No Records Found</h1>
+            :
+            <table className="w-full">
                 <thead>
                 <tr>
                   <th className="py-2">Serial No</th>
@@ -132,68 +136,58 @@ export default function SellRecords() {
                 </tr>
                 </thead>
 
-                <tbody className="text-center">
-                {   
-              products.length === 0 ? 
-              <tr className="text-red-400 text-3xl font-bold">
-                <td colSpan={11}>
-                No Records Found
-                </td>
-                
-              </tr>
-              :
-              <>
-                {
+              <tbody className="text-center">
+                {                
                   dueOnly ?
-                  products.map(({product_id,customer_name,
-                    contact_no,
-                    address,
-                    product_name,
-                    configuration,
-                    due,
-                    buying_price,
-                    selling_price,
-                    selling_date} : SellRecords,index) => {
-                    if (due > 0) {
-                      return <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
-                      <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">
-                            <AlertDialog>
-                              <AlertDialogTrigger 
-                              className="hover:text-red-500 transition-all"
-                              >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                </svg>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    You want to sell record of Product ID : <b className="text-green-500">{product_id}</b><br />
-                                    This action is a permenant one and cannot be <b className="text-red-500">undone !</b>
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={()=>handleDelete(product_id)}>Proceed</AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog> 
-                      </td>
-                    </tr> 
-                    } 
-                         } )
+                          products.map(({product_id,customer_name,
+                            contact_no,
+                            address,
+                            product_name,
+                            configuration,
+                            due,
+                            buying_price,
+                            selling_price,
+                            selling_date} : SellRecords,index) => {
+                            if (due > 0) {
+                              return <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
+                                    <AlertDialog>
+                                      <AlertDialogTrigger 
+                                      className="hover:text-red-500 transition-all"
+                                      >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            You want to sell record of Product ID : <b className="text-green-500">{product_id}</b><br />
+                                            This action is a permenant one and cannot be <b className="text-red-500">undone !</b>
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                          <AlertDialogAction onClick={()=>handleDelete(product_id)}>Proceed</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog> 
+                              </td>
+                            </tr> 
+                            } 
+                        } )
                   :
                   products.map(({product_id,customer_name,
                     contact_no,
@@ -205,18 +199,18 @@ export default function SellRecords() {
                     selling_price,
                     selling_date} : SellRecords,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
-                            <td className="border-y border-zinc-400 py-2 dark:border-zinc-700 px-5">
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_name}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{configuration}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700 px-5">
                             <AlertDialog>
                               <AlertDialogTrigger 
                               className="hover:text-red-500 transition-all"
@@ -242,12 +236,11 @@ export default function SellRecords() {
                             </td>
                           </tr> 
                           )
-                }
-              </>  
                   }
-                       
-                        </tbody>
-              </table>
+                </tbody>
+            </table>
+          }
+              
         </div>
         <div className='flex justify-center pb-10'>
             {   pageCount > 1 &&
@@ -256,8 +249,9 @@ export default function SellRecords() {
                     key={index}
                     onClick={()=>setPage(number)} 
                     className={page === number
-                    ? 'px-3 py-1 mx-1 rounded-lg text-white bg-teal-500' 
-                    : 'px-2 mx-1 rounded-lg border-2 border-teal-500 text-teal-500 hover:text-white hover:bg-teal-500 transition-all'}
+                    ? 'px-2 text-white border-2 border-black bg-black mx-1 rounded-lg dark:text-black dark:bg-zinc-200 dark:border-zinc-200' 
+                    : `px-2 mx-1 rounded-md shadow-md text-black border border-black hover:bg-black hover:text-white
+                    dark:border-zinc-200 dark:text-zinc-200 dark:hover:text-black dark:hover:bg-zinc-200 transition-all`}
                     >{number + 1}
                 </button>
                 )

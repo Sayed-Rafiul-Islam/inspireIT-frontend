@@ -106,9 +106,9 @@ export default function AddSell() {
       }
     }
   return (
-    <div>
+    <div className="pb-20 lg:mt-0 mt-20">
       <h1 className='text-4xl font-bold text-center mt-10'>Sell Product</h1>
-            <div className="flex flex-col w-1/3 mx-auto mt-5">
+            <div className="flex flex-col lg:w-1/3 mx-auto mt-5">
                   <input
                     placeholder='Enter Product ID' 
                     className="text-zinc-700 w-1/3 outline-none mx-auto border-b border-zinc-300
@@ -129,12 +129,12 @@ export default function AddSell() {
 
             {
               product &&
-              <div className="border-r-2 border-l-2 w-1/2 mx-auto rounded-lg">
+              <div className="border-r-2 border-l-2 lg:w-1/2 w-5/6 mx-auto rounded-lg mt-6">
                 <div className="pl-12 pt-6">
-                    <h1 className="text-3xl font-bold">{product.product_name}</h1>
-                    <h2 className="text-lg font-semibold text-zinc-600 dark:text-zinc-400">{product.configuration}</h2>
+                    <h1 className="text-2xl lg:text-3xl font-bold">{product.product_name}</h1>
+                    <h2 className="text-md lg:text-lg font-semibold text-zinc-600 dark:text-zinc-400">{product.configuration}</h2>
                 </div>
-                <div className="flex flex-col w-3/4 mt-4 rounded-lg gap-y-8 py-8 pl-12 mb-10">  
+                <div className="flex flex-col lg:w-3/4 mt-4 rounded-lg gap-y-8 py-8 pl-12 mb-10">  
                   <input
                     placeholder='Customer Name' 
                     className={input} 
@@ -173,7 +173,7 @@ export default function AddSell() {
                   <p className="text-red-500">{sellMessage}</p>
                   <AlertDialog>
                     <AlertDialogTrigger 
-                    className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 ml-48 rounded-lg transition-all
+                    className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 lg:ml-48 ml-12 rounded-lg transition-all
                     hover:shadow-md hover:shadow-zinc-700"
                     >
                       Sell Product

@@ -8,7 +8,6 @@ interface AuthContextProps {
   active : string;
   setActive : React.Dispatch<React.SetStateAction<string>>;
   user: boolean;
-  // setUser : React.Dispatch<React.SetStateAction<boolean>>;
   login: (email: string, password: string) => Promise<number>;
   logout: () => void;
   signup: (email: string, password: string, userName: string) => Promise<number>;
