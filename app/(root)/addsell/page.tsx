@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { findProductById } from "../actions/findProductById"
 import { addSell } from "../actions/addSell"
-import { useUserAuth } from "../context/AuthContext"
 import { usePathname } from "next/navigation"
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -94,6 +93,7 @@ export default function AddSell() {
         const status =  await addSell(data)
         if (status === 200) {
           toast.success('Record Added to the sell Records')
+          window.open(`http://localhost:3000/sellrecords/${productId}`, '_ blank')
           clearFields()
         } else if (status === 500) {
           setProductId('')

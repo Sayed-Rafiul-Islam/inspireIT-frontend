@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { useUserAuth } from "../context/AuthContext";
+import moment from 'moment';
 import { usePathname } from "next/navigation";
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -18,6 +18,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import accessProvider from "../actions/accessProvider";
+import Link from "next/link";
 
 interface SellRecords {
   product_id : string,
@@ -151,7 +152,9 @@ export default function SellRecords() {
                             if (due > 0) {
                               return <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
-                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
+                                <Link href={`sellrecords/${product_id}`} target="_blank">{customer_name}</Link>
+                              </td> 
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
@@ -160,14 +163,14 @@ export default function SellRecords() {
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                              <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{moment(selling_date.split("T")[0],"YYYY-MM-DD").format("MMMM Do YYYY")}</td>
                               <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
                                     <AlertDialog>
                                       <AlertDialogTrigger 
                                       className="hover:text-red-500 transition-all"
                                       >
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                          <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                         </svg>
                                       </AlertDialogTrigger>
                                       <AlertDialogContent>
@@ -200,7 +203,9 @@ export default function SellRecords() {
                     selling_date} : SellRecords,index) => 
                           <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{page*10 + index + 1}</td>
-                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{customer_name}</td> 
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
+                                <Link className="hover:text-green-500" href={`sellrecords/${product_id}`} target="_blank">{customer_name}</Link>
+                              </td>  
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{contact_no}</td> 
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{address}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{product_id}</td>
@@ -209,14 +214,14 @@ export default function SellRecords() {
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
-                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700 px-5">
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{moment(selling_date.split("T")[0],"YYYY-MM-DD").format("MMMM Do YYYY")}</td>
+                            <td className="lg:px-0 border-y border-zinc-400 py-2 dark:border-zinc-700 px-5">
                             <AlertDialog>
                               <AlertDialogTrigger 
                               className="hover:text-red-500 transition-all"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                 </svg>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
@@ -242,7 +247,7 @@ export default function SellRecords() {
           }
               
         </div>
-        <div className='flex justify-center pb-10'>
+        <div className='flex justify-center pb-10 mt-10'>
             {   pageCount > 1 &&
                 pages.map((number,index) => 
                 <button 

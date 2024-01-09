@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import SellRecords from "../sellrecords/page";
-import { useUserAuth } from "../context/AuthContext";
+import moment from 'moment';
 import { usePathname } from "next/navigation";
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -208,7 +208,7 @@ export default function AddMonthlyRecord() {
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{buying_price} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_price} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
-                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{selling_date.split("T")[0]}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{moment(selling_date.split("T")[0],"YYYY-MM-DD").format("MMMM Do YYYY")}</td>
                           </tr> 
                         )            
                       }      

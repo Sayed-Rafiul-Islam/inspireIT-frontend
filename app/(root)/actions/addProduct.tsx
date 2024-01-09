@@ -6,13 +6,14 @@ export const addProduct = async (
     configuration: string,
     source_name : string, 
     unit_price : number,
+    import_date : string
     ) => {
     const res = await fetch(`http://localhost:5000/addProduct`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"
         },
-        body : JSON.stringify({product_id,product_name,source_name,configuration,unit_price}),
+        body : JSON.stringify({product_id,product_name,source_name,configuration,unit_price,import_date}),
         cache : "no-store"
     }) 
     const status = res.status

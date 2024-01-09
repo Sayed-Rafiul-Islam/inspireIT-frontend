@@ -18,12 +18,13 @@ import { useState } from "react";
 
 export default function Navbar() {
   const {user,logout,active} = useUserAuth()
+  const noShow = active.includes('/sellrecords/')
   const [rotate,setRotate] = useState(false)
   const activeClass = 'text-zinc-800 dark:text-zinc-300 transition-all font-bold'
   const inactiveClass = 'text-zinc-500 dark:hover:text-zinc-300 hover:text-zinc-800 transition-all'
   return (
-        <div>
-          <div className=" lg-navbar">
+        <div className={noShow ? 'hidden' : ""}>
+          <div className="lg-navbar">
               <ul className="flex px-10 justify-between border-b dark:border-zinc-700 border-zinc-200">
                 {
                   user && 
@@ -48,10 +49,10 @@ export default function Navbar() {
           <div className="sm-navbar ">
           <DropdownMenu>
             <DropdownMenuTrigger className="fixed left-2 top-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" 
             onClick={()=>setRotate(!rotate)}
             className='w-6 h-6'>
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
 
             </DropdownMenuTrigger>

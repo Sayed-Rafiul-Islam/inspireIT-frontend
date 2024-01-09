@@ -1,0 +1,39 @@
+.inv-size {
+    position: relative;
+    height: 1400px;
+    width: 1070px;
+    border: 1px solid black;
+    background: white;
+    z-index: -2;
+}
+.top1{
+    height: 70px;
+}
+.top2{
+    height: 35px;
+    position: absolute;
+    background: black;
+    z-index: -1;
+    width: 100%;
+}
+.invoice-details {
+    margin-top: 5px;
+    height: 400px;
+    width: 100%;
+}
+.invoice-details-bg {
+    height: 50px;
+    width: 100%;
+    background: #d1d5db;
+}
+.bottom1{
+    height: 60px;
+}
+.bottom2{
+    height: 30px;
+    position: absolute;
+    background: black;
+    z-index: -1;
+    width: 100%;
+    bottom: 42px;
+}

@@ -26,6 +26,7 @@ export default function AddProduct() {
   const [productName,setProductName] = useState('')
   const [configuration,setConfiguration] = useState('')
   const [sourceName,setSourceName] = useState('')
+  const [date,setDate] = useState('')
   const [unitPrice,setUnitPrice] = useState<number>(0)
   const input = `text-zinc-700 lg:w-2/3 outline-none border-b border-zinc-300
   dark:border-zinc-700 dark:placeholder:text-zinc-700 dark:text-zinc-300 dark:bg-inherit
@@ -41,10 +42,10 @@ export default function AddProduct() {
   
   const handleSubmit = async () => {
     
-      if (productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice) {
+      if (productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice || date === '') {
         toast.error("Invalid input")
       } else {
-        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice)
+        const status = await addProduct(productId,productName,configuration,sourceName,unitPrice,date)
         if (status === 200) {
             clearFields()
             toast.success("Product added to the inventory")
@@ -100,8 +101,9 @@ export default function AddProduct() {
             type="number" 
             value={unitPrice} 
             onChange={(e)=> setUnitPrice(parseInt(e.target.value))} />
+            <input type="date" className={input} value={date} onChange={e=> setDate(e.target.value)} />
             {
-              productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice ||
+              productId === '' || productName === '' || configuration === '' || sourceName === '' || !unitPrice || date === '' ||
               <AlertDialog>
                     <AlertDialogTrigger 
                     className="mt-2 border-b-2 border-r-2 px-2 py-1 w-1/2 lg:ml-12 mx-auto rounded-lg transition-all
