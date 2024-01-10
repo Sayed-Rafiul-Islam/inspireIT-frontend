@@ -17,6 +17,7 @@
     width: 100%;
 }
 .invoice-details {
+    position: relative;
     margin-top: 5px;
     height: 400px;
     width: 100%;
@@ -35,5 +36,5 @@
     background: black;
     z-index: -1;
     width: 100%;
-    bottom: 42px;
+    bottom: 52px;
 }

@@ -45,12 +45,14 @@ export default function SellRecord({params} : any) {
         {
             info &&
             <>
-            <Image height={170} width={170} className='absolute left-16 top-2' src={logo_white} alt=''></Image>
-            <div className='top1 w-full bg-black'></div>
-            <div className='top2'></div>
-            <div className='top1 w-full flex'>
-                <div className='top1 w-1/2 bg-black rounded-br-3xl'></div>
-                <div className='top1 w-1/2 bg-white rounded-tl-3xl'></div>
+            <div className='relative'>
+                <Image height={170} width={170} className='absolute left-16 top-2' src={logo_white} alt=''></Image>
+                <div className='top1 w-full bg-black'></div>
+                <div className='top2'></div>
+                <div className='top1 w-full flex'>
+                    <div className='top1 w-1/2 bg-black rounded-br-3xl'></div>
+                    <div className='top1 w-1/2 bg-white rounded-tl-3xl'></div>
+                </div>
             </div>
             <div className='mx-16'>
                 <div className='mt-10 text-black'>
@@ -65,14 +67,14 @@ export default function SellRecord({params} : any) {
                     <h2 className='text-xl py-5'>Qty</h2>
                     <h2 className='col-span-2 text-xl py-5'>Price</h2>
                 </div>
-                <Image height={250} width={250} className='absolute ml-16 mt-28 left-1/3 top-1/3' src={logo_gray} alt=''></Image>
-                <div className='invoice-details grid grid-cols-12 text-black z-10'>
                 
+                <div className='invoice-details grid grid-cols-12 text-black'>
+                <Image height={250} width={250} className='absolute left-1/3 top-1/4 ml-12' src={logo_gray} alt=''></Image>
                     <div className='bg-gray-300 col-span-3'>
                         <h2 className='text-center text-xl mt-5 font-bold'>{params.id}</h2>
                     </div>
                     <div className='bg-white col-span-6'>
-                        <h2 className='mx-5 text-xl mt-5 font-bold'>{info.product_name}</h2>
+                        <h2 className='mx-5 text-xl mt-5 font-bold z-10'>{info.product_name}</h2>
                     </div>
                     <div className='bg-gray-300'>
                     <h2 className='text-center text-xl mt-5 font-bold'>1</h2>
@@ -98,18 +100,20 @@ export default function SellRecord({params} : any) {
                 </div>
             </div>
     
-            <div className='absolute border-t-4 border-black right-4 bottom-14'>
-                <h2 className='text-black font-extrabold text-2xl px-10 py-3'>
-                    Shop Owner and Signature with Date
-                </h2>
+            <div className='relative mt-20 mb-20'>
+                <div className='absolute border-t-4 border-black right-4 top-0'>
+                    <h2 className='text-black font-extrabold text-2xl px-10 py-3'>
+                        Shop Owner and Signature with Date
+                    </h2>
+                </div>
+                
+                <div className='bottom1 w-full flex'>
+                    <div className='bottom1 w-1/2 bg-black rounded-tr-3xl'></div>
+                    <div className='bottom1 w-1/2 bg-white rounded-bl-3xl'></div>
+                </div>
+                <div className='bottom2'></div>
+                <div className='bottom1 w-full bg-black'></div>
             </div>
-            
-            <div className='bottom1 w-full flex mt-20'>
-                <div className='bottom1 w-1/2 bg-black rounded-tr-3xl'></div>
-                <div className='bottom1 w-1/2 bg-white rounded-bl-3xl'></div>
-            </div>
-            <div className='bottom2'></div>
-            <div className='bottom1 w-full bg-black'></div>
             </>
         }
         
