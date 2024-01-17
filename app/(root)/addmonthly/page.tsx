@@ -57,7 +57,7 @@ export default function AddMonthlyRecord() {
     useEffect(()=>{
       const accessToken = localStorage.getItem("accessToken")
         const getPageCount = async () => {
-            const res = await fetch(`http://localhost:5000/sellRecordsByDatePageCount?from=${startDate}&to=${endDate}&accessToken=${accessToken}`,
+            const res = await fetch(`http://localhost:5000/api/sellRecordsByDatePageCount?from=${startDate}&to=${endDate}&accessToken=${accessToken}`,
             {cache : 'no-store'})
             const pageCount = await res.json()
             setPageCount(Math.ceil(pageCount))
@@ -72,7 +72,7 @@ export default function AddMonthlyRecord() {
     // Products
     useEffect(()=> {
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}`,
+          const res = await fetch(`http://localhost:5000/api/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}`,
           {cache : "no-store"}
           )
             const products = await res.json()
@@ -110,7 +110,7 @@ export default function AddMonthlyRecord() {
         profit : calculation,
         record_date : date
     }
-    const res = await fetch(`http://localhost:5000/addMonthly`, {
+    const res = await fetch(`http://localhost:5000/api/addMonthly`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"
@@ -280,7 +280,7 @@ export default function AddMonthlyRecord() {
                                   <p>Total Sold : {sellingPrice} BDT</p>
                                   <p>Employee Costs : {employeeBill} BDT</p>
                                   <p>Additional Costs : {additionalCosts} BDT</p>
-                                  <p className="text-md">Total remaining Due : <b className="text-green-500">{calculation}</b> BDT</p>
+                                  <p className="text-md">Total Profit : <b className="text-green-500">{calculation}</b> BDT</p>
                               
                                 </AlertDialogDescription>
                               </AlertDialogHeader>

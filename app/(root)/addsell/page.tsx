@@ -24,7 +24,8 @@ interface Product {
   product_name : string,
   configuration : string,
   source_name : string,
-  unit_price : number
+  unit_price : number,
+  import_date : string
 }
 
 export default function AddSell() {
@@ -89,6 +90,7 @@ export default function AddSell() {
           selling_price : price,
           due:due,
           source_name : product.source_name,
+          import_date : product.import_date
         }
         const status =  await addSell(data)
         if (status === 200) {

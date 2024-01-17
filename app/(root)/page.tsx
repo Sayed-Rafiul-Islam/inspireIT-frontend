@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation"
 import accessProvider from "./actions/accessProvider"
+import  logo_gray  from '@/image/logo_gray.png'
+import Image from 'next/image';
 
 
 export default function Home() {
@@ -9,7 +11,9 @@ export default function Home() {
   accessProvider(path)
     return (
       <div>
-          <h1 className="text-center mt-52">Home</h1>
+          <div className="mx-auto w-1/3 mt-36">
+            <Image className='mx-auto opacity-40' src={logo_gray} alt=''></Image>
+          </div>
       </div>
     )
   }

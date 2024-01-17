@@ -43,7 +43,7 @@ export default function Products() {
   //  page count
   useEffect(()=>{
     const getPageCount = async () => {
-        const res = await fetch(`http://localhost:5000/inventoryPageCount`,{cache : "no-store"})
+        const res = await fetch(`http://localhost:5000/api/inventoryPageCount`,{cache : "no-store"})
         const pageCount = await res.json()
         setPageCount(Math.ceil(pageCount))
     }
@@ -53,7 +53,7 @@ export default function Products() {
     // Products
   useEffect(()=> { 
     const getProducts = async () => {
-      const res = await fetch(`http://localhost:5000/inventory?page=${page}`,{cache : "no-store"})
+      const res = await fetch(`http://localhost:5000/api/inventory?page=${page}`,{cache : "no-store"})
       const data = await res.json()
       setProducts(data)        
      }
@@ -62,7 +62,7 @@ export default function Products() {
 
 
   const handleDelete = async (id : number) => {
-    const res = await fetch(`http://localhost:5000/inventory?id=${id}`, {
+    const res = await fetch(`http://localhost:5000/api/inventory?id=${id}`, {
       method : "DELETE"
     })
     const status = res.status
@@ -146,7 +146,7 @@ export default function Products() {
               
         </div>
         <div className='flex justify-center pb-10 mt-10'>
-            {   pageCount > 0 &&
+            {   pageCount > 1 &&
                 pages.map((number,index) => 
                 <button 
                     key={index}

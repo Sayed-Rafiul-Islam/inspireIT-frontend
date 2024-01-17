@@ -18,7 +18,7 @@ export default function SignUpForm() {
             setMessage("Fill in all the fields")
         }
         else {
-            const status = await signup(email,name,password)
+            const status = await signup(name,email,password)
             if (status === 400) {
                 setLoading(false)
                 setMessage("Email already in use")

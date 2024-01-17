@@ -42,13 +42,10 @@ export default function MonthlyRevenue() {
             alert("Enter Date")
         } else {
             const date = month + "/" + year
-            const res = await fetch(`http://localhost:5000/monthlyRecords?record_date=${date}`,{cache : "no-store"})
+            const res = await fetch(`http://localhost:5000/api/monthlyRecords?record_date=${date}`,{cache : "no-store"})
             const status = res.status
           if (status === 200) {
                 const records = await res.json()
-                records.sort(function(a : any, b : any) { 
-                  return b.serial - a.serial
-                });
                 setRecords(records)
             }
 
@@ -56,7 +53,7 @@ export default function MonthlyRevenue() {
     }
     const handleDelete = async (id : number) => {
  
-      const res = await fetch(`http://localhost:5000/monthlyRecord?id=${id}`, {
+      const res = await fetch(`http://localhost:5000/api/monthlyRecord?id=${id}`, {
         method : "DELETE"
     })
     const status = res.status
@@ -109,7 +106,7 @@ export default function MonthlyRevenue() {
        <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
             {
               records.length === 0 ?
-              <h1 className="text-red-500 text-3xl text-center">No Records Found</h1>
+              <h1 className="text-red-500 text-3xl text-center lg:mx-auto">No Records Found</h1>
               :
               <table className="w-full">
                 <thead>

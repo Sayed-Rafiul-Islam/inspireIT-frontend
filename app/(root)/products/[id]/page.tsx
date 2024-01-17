@@ -38,7 +38,7 @@ export default function Product({params} : any) {
     // get info
     useEffect(()=>{
       const getInfo = async () => {
-          const res = await fetch(`http://localhost:5000/inventoryItem?id=${params.id}`)
+          const res = await fetch(`http://localhost:5000/api/inventoryItem?id=${params.id}`)
           const data = await res.json()
           setInfo(data)   
       }
@@ -50,7 +50,7 @@ export default function Product({params} : any) {
       const getPageCount = async () => {
         if (info) {
           const {product_name,configuration,source_name,unit_price,import_date} = info
-          const res = await fetch(`http://localhost:5000/productsPageCount?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&import_date=${import_date}`)
+          const res = await fetch(`http://localhost:5000/api/productsPageCount?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&import_date=${import_date}`)
           const data = await res.json()
           setPageCount(data)
         }
@@ -64,7 +64,7 @@ export default function Product({params} : any) {
         const getProductIds = async () => {
           if (info) {
             const {product_name,configuration,source_name,unit_price,import_date} = info
-            const res = await fetch(`http://localhost:5000/productIds?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&import_date=${import_date}&page=${page}`)
+            const res = await fetch(`http://localhost:5000/api/productIds?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&import_date=${import_date}&page=${page}`)
             const data = await res.json()
             setProductIds(data)
           }   
@@ -75,7 +75,7 @@ export default function Product({params} : any) {
     const handleDelete = async (id : string) => {
           if (info) {
             const {product_name,configuration,source_name,unit_price,import_date} = info
-            const res = await fetch(`http://localhost:5000/product?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&id=${id}&import_date=${import_date}`, {
+            const res = await fetch(`http://localhost:5000/api/product?product_name=${product_name}&configuration=${configuration}&source_name=${source_name}&unit_price=${unit_price}&id=${id}&import_date=${import_date}`, {
               method : "DELETE"
           })
           const status = res.status

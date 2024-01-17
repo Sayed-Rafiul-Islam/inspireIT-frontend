@@ -30,10 +30,9 @@ export default function SellRecord({params} : any) {
     // get info
     useEffect(()=>{
         const getInfo = async () => {
-            const res = await fetch(`http://localhost:5000/sellRecord?id=${params.id}`)
+            const res = await fetch(`http://localhost:5000/api/sellRecord?id=${params.id}`)
             const data = await res.json()
             setInfo(data)   
-            // const date = moment(data.selling_date.split("T")[0],"YYYY-MM-DD").format("DD/MM/YYYY")
             const date = moment(data.selling_date.split("T")[0],"YYYY-MM-DD").format("MMMM Do YYYY")
             setDate(date)
         }
