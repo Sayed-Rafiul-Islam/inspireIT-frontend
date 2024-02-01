@@ -42,7 +42,7 @@ export default function MonthlyRevenue() {
             alert("Enter Date")
         } else {
             const date = month + "/" + year
-            const res = await fetch(`http://localhost:5000/api/monthlyRecords?record_date=${date}`,{cache : "no-store"})
+            const res = await fetch(`https://inspired-it-backend.vercel.app/api/monthlyRecords?record_date=${date}`,{cache : "no-store"})
             const status = res.status
           if (status === 200) {
                 const records = await res.json()
@@ -53,7 +53,7 @@ export default function MonthlyRevenue() {
     }
     const handleDelete = async (id : string) => {
  
-      const res = await fetch(`http://localhost:5000/api/monthlyRecord?id=${id}`, {
+      const res = await fetch(`https://inspired-it-backend.vercel.app/api/monthlyRecord?id=${id}`, {
         method : "DELETE"
     })
     const status = res.status
