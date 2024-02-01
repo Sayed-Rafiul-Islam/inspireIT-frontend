@@ -3,7 +3,7 @@
 import { useUserAuth } from "@/app/(root)/context/AuthContext"
 import { useEffect } from "react"
 
-export default function accessProvider(path : string) {
+export default function AccessProvider(path : string) {
     const {logout,setActive} = useUserAuth()
 
     useEffect(()=>{
