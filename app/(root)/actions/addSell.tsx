@@ -15,7 +15,7 @@ interface Data {
 }
 
 export const addSell = async (data : Data) => {
-    const res = await fetch(`https://inspired-it-backend.vercel.app/api/addSell`, {
+    const res = await fetch(`http://localhost:5000/api/addSell`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

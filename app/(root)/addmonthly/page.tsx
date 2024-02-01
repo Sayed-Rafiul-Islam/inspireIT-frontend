@@ -56,7 +56,7 @@ export default function AddMonthlyRecord() {
     //  page count
     useEffect(()=>{
         const getPageCount = async () => {
-            const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellRecordsByDatePageCount?from=${startDate}&to=${endDate}`,
+            const res = await fetch(`http://localhost:5000/api/sellRecordsByDatePageCount?from=${startDate}&to=${endDate}`,
             {cache : 'no-store'})
             const pageCount = await res.json()
             setPageCount(Math.ceil(pageCount))
@@ -71,7 +71,7 @@ export default function AddMonthlyRecord() {
     // Products
     useEffect(()=> {
       const getProducts = async () => {
-          const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}`,
+          const res = await fetch(`http://localhost:5000/api/sellRecordsByDate?page=${page}&from=${startDate}&to=${endDate}`,
           {cache : "no-store"}
           )
             const products = await res.json()
@@ -109,7 +109,7 @@ export default function AddMonthlyRecord() {
         profit : calculation,
         record_date : date
     }
-    const res = await fetch(`https://inspired-it-backend.vercel.app/api/addMonthly`, {
+    const res = await fetch(`http://localhost:5000/api/addMonthly`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

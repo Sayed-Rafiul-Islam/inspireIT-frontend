@@ -9,7 +9,7 @@ export default function AccessProvider(path : string) {
     useEffect(()=>{
         const varify = async () => {
             const access = localStorage.getItem("accessToken")
-            const res = await fetch(`https://inspired-it-backend.vercel.app/api/varify?accessToken=${access}`,{cache : "no-store"})
+            const res = await fetch(`http://localhost:5000/api/varify?accessToken=${access}`,{cache : "no-store"})
             const status = res.status
             if (status === 401 || status === 403 || status === 500) {
               logout()

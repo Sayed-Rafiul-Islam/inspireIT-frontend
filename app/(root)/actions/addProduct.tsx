@@ -8,7 +8,7 @@ export const addProduct = async (
     unit_price : number,
     import_date : string
     ) => {
-    const res = await fetch(`https://inspired-it-backend.vercel.app/api/addProduct`, {
+    const res = await fetch(`http://localhost:5000/api/addProduct`, {
         method : "POST",
         headers : {
             "Content-type" : "application/json"

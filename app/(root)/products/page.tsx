@@ -21,7 +21,7 @@ import {
 import accessProvider from "../actions/accessProvider";
 
 interface Product {
-  id : number,
+  _id : string,
   product_name : string,
   configuration : string,
   source_name : string,
@@ -43,7 +43,7 @@ export default function Products() {
   //  page count
   useEffect(()=>{
     const getPageCount = async () => {
-        const res = await fetch(`https://inspired-it-backend.vercel.app/api/inventoryPageCount`,{cache : "no-store"})
+        const res = await fetch(`http://localhost:5000/api/inventoryPageCount`,{cache : "no-store"})
         const pageCount = await res.json()
         setPageCount(Math.ceil(pageCount))
     }
@@ -53,7 +53,7 @@ export default function Products() {
     // Products
   useEffect(()=> { 
     const getProducts = async () => {
-      const res = await fetch(`https://inspired-it-backend.vercel.app/api/inventory?page=${page}`,{cache : "no-store"})
+      const res = await fetch(`http://localhost:5000/api/inventory?page=${page}`,{cache : "no-store"})
       const data = await res.json()
       setProducts(data)        
      }
@@ -61,8 +61,8 @@ export default function Products() {
   },[page,update])
 
 
-  const handleDelete = async (id : number) => {
-    const res = await fetch(`https://inspired-it-backend.vercel.app/api/inventory?id=${id}`, {
+  const handleDelete = async (id : string) => {
+    const res = await fetch(`http://localhost:5000/api/inventory?id=${id}`, {
       method : "DELETE"
     })
     const status = res.status
@@ -97,13 +97,14 @@ export default function Products() {
 
                 <tbody className="text-center">
                 {
-                  products.map(({id,product_name,configuration,source_name,unit_price,quantity,import_date} : Product,index) => {
+                  products.map(({_id,product_name,configuration,source_name,unit_price,quantity,import_date} : Product,index) => {
                     if (product_name) {
+                      console.log(_id)
                       return (
                         <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={index}>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{page*10 + index+1}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700 hover:text-green-600" >
-                              <Link href={quantity < 1 ? `` :`/products/${id}`}>{product_name}</Link>
+                              <Link href={quantity < 1 ? `` :`/products/${_id}`}>{product_name}</Link>
                             </td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{configuration}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700" >{source_name}</td>
@@ -128,7 +129,7 @@ export default function Products() {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={()=>handleDelete(id)}>Proceed</AlertDialogAction>
+                                  <AlertDialogAction onClick={()=>handleDelete(_id)}>Proceed</AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>  
