@@ -106,7 +106,7 @@ export default function MonthlyRevenue() {
        <div className="lg:w-11/12 flex mx-auto lg:overflow-auto overflow-x-scroll">
             {
               records.length === 0 ?
-              <h1 className="text-red-500 text-3xl text-center lg:mx-auto">No Records Found</h1>
+              <h1 className="text-red-500 text-3xl text-center mx-auto">No Records Found</h1>
               :
               <table className="w-full">
                 <thead>
