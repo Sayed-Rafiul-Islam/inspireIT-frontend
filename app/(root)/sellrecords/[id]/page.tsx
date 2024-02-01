@@ -30,7 +30,7 @@ export default function SellRecord({params} : any) {
     // get info
     useEffect(()=>{
         const getInfo = async () => {
-            const res = await fetch(`http://localhost:5000/api/sellRecord?id=${params.id}`)
+            const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellRecord?id=${params.id}`)
             const data = await res.json()
             setInfo(data)   
             const date = moment(data.selling_date.split("T")[0],"YYYY-MM-DD").format("MMMM Do YYYY")

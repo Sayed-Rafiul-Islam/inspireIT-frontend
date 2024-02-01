@@ -48,7 +48,7 @@ export default function SellRecords() {
       //  page count
       useEffect(()=>{
         const getPageCount = async () => {
-            const res = await fetch(`http://localhost:5000/api/sellPageCount?due=${dueOnly}`,{cache : 'no-store'})
+            const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellPageCount?due=${dueOnly}`,{cache : 'no-store'})
               const pageCount = await res.json()
               setPageCount(Math.ceil(pageCount))
         }
@@ -58,7 +58,7 @@ export default function SellRecords() {
     // Sell Records
     useEffect(()=> {
       const getProducts = async () => {
-          const res = await fetch(`http://localhost:5000/api/sellRecords?due=${dueOnly}&page=${page}&search=${search}`,
+          const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellRecords?due=${dueOnly}&page=${page}&search=${search}`,
           {cache : "no-store"}
           )
           const status = res.status
@@ -82,7 +82,7 @@ export default function SellRecords() {
       }
 
       const handleDelete = async (id : string) => {
-        const res = await fetch(`http://localhost:5000/api/sellRecords?id=${id}`, {
+        const res = await fetch(`https://inspired-it-backend.vercel.app/api/sellRecords?id=${id}`, {
           method : "DELETE"
       })
       const status = res.status

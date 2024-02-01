@@ -20,7 +20,7 @@ import {
 import accessProvider from "../actions/accessProvider";
 
 interface Records {
-    monthly_record_id : number,
+    _id : string,
     bought : number,
     sold : number,
     due : number,
@@ -42,7 +42,7 @@ export default function MonthlyRevenue() {
             alert("Enter Date")
         } else {
             const date = month + "/" + year
-            const res = await fetch(`http://localhost:5000/api/monthlyRecords?record_date=${date}`,{cache : "no-store"})
+            const res = await fetch(`https://inspired-it-backend.vercel.app/api/monthlyRecords?record_date=${date}`,{cache : "no-store"})
             const status = res.status
           if (status === 200) {
                 const records = await res.json()
@@ -51,9 +51,9 @@ export default function MonthlyRevenue() {
 
         }
     }
-    const handleDelete = async (id : number) => {
+    const handleDelete = async (id : string) => {
  
-      const res = await fetch(`http://localhost:5000/api/monthlyRecord?id=${id}`, {
+      const res = await fetch(`https://inspired-it-backend.vercel.app/api/monthlyRecord?id=${id}`, {
         method : "DELETE"
     })
     const status = res.status
@@ -125,7 +125,7 @@ export default function MonthlyRevenue() {
                 <tbody className="text-center">
                 {   
                   records.map(({
-                    monthly_record_id,
+                    _id,
                     bought,
                     sold,
                     employee,
@@ -133,7 +133,7 @@ export default function MonthlyRevenue() {
                     due,
                     profit,
                     record_date} : Records,index) => 
-                          <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={monthly_record_id}>
+                          <tr className={index%2 === 1 ? 'bg-slate-200 dark:bg-zinc-900' : ''} key={_id}>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{index + 1}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{bought} BDT</td> 
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{sold} BDT</td> 
@@ -141,7 +141,7 @@ export default function MonthlyRevenue() {
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{additionals} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{due} BDT</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{profit} BDT</td>
-                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{monthly_record_id}</td>
+                            <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{_id}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">{record_date}</td>
                             <td className="lg:px-0 px-10 border-y border-zinc-400 py-2 dark:border-zinc-700">
                             <AlertDialog>
@@ -156,13 +156,13 @@ export default function MonthlyRevenue() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    You want to delete monthly record of ID : <b className="text-red-500">{monthly_record_id}</b><br />
+                                    You want to delete monthly record of ID : <b className="text-red-500">{_id}</b><br />
                                     This action is a permenant one and cannot be <b className="text-red-500">undone !</b>
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={()=>handleDelete(monthly_record_id)}>Proceed</AlertDialogAction>
+                                  <AlertDialogAction onClick={()=>handleDelete(_id)}>Proceed</AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>  
