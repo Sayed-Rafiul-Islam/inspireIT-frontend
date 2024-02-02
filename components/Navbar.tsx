@@ -47,7 +47,8 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="sm-navbar ">
-          <DropdownMenu>
+          { user &&
+            <DropdownMenu>
             <DropdownMenuTrigger className="fixed left-2 top-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" 
             onClick={()=>setRotate(!rotate)}
@@ -84,6 +85,7 @@ export default function Navbar() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          }
           <ModeToggle />
           </div>
         </div>
